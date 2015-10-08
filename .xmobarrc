@@ -1,0 +1,29 @@
+Config { font = "xft:Ubuntu Mono:size=12:Regular:antialias=true"
+       , additionalFonts = ["xft:Hack:size=10:Bold:antialias=true", 
+                             "xft:Ubuntu Mono:size=12:Regular:antialias=true"]
+       , border = NoBorder
+       , bgColor = "#2E3436"
+       , fgColor = "#5E717A"
+       , alpha = 255
+       , position = Top
+       , textOffset = 18
+       , iconOffset = 10
+       , lowerOnStart = True
+       , pickBroadest = False
+       , persistent = True
+       , hideOnStart = False
+       , iconRoot = "."
+       , allDesktops = True
+       , overrideRedirect = True
+       , commands = [ 
+                  Run DynNetwork ["-t", "<rx> KB/s : <tx> KB/s"] 10
+                , Run MultiCpu ["-S", "on", "-t", "<total>"] 10
+                , Run Memory ["-t","<usedratio>%"] 10
+                , Run Com "/home/thomas/.xmonad/volume.sh" [] "vol" 1
+                , Run Date "%b%_d %H:%M" "date" 10
+                , Run StdinReader
+        ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = " %StdinReader% }{ <fn=2><fc=#5E717A><icon=.xmonad/icons/cpu.xbm/></fc> %multicpu%  <fc=#5E717A><icon=.xmonad/icons/mem.xbm/></fc> %memory%  <fc=#5E717A><icon=.xmonad/icons/down.xbm/></fc><fc=#5E717A><icon=.xmonad/icons/up.xbm/></fc> %dynnetwork%  <fc=#5E717A><icon=.xmonad/icons/vol.xbm/></fc> %vol%</fn>   <fn=1><fc=#20A294>%date%</fc></fn> " 
+}
