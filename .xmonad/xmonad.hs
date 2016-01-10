@@ -13,13 +13,16 @@ import XMonad.Util.Run(spawnPipe)
 import System.IO
 import Data.Monoid
 
-modKey = mod1Mask
+modKey = mod4Mask
 borderNormalColor  = "#455A64"
 normalTextColor    = "#5E717A"
 highlightTextColor = "#20A294"
 
 main = do
     xmproc <- spawnPipe "xmobar /home/thomas/.xmobarrc"
+    spawn "nm-applet &"
+    spawn "dropbox start"
+    spawn "xrandr --output VGA1 --primary --above LVDS1"
     xmonad $ defaultConfig {
           modMask     = modKey
         , workspaces  = myWorkspaces
