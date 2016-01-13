@@ -1,0 +1,3 @@
+:set prompt "\ESC[0;37m%s \ESC[1;91mλ \ESC[m"
+
+:def hlint const . return $ ":! hlint \"src\""
