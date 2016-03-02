@@ -23,28 +23,29 @@ main = do
     spawn "nm-applet &"
     spawn "dropbox start"
     spawn "xrandr --output VGA1 --primary --above LVDS1"
+    spawn "nitrogen --restore"
     xmonad $ defaultConfig {
           modMask     = modKey
         , workspaces  = myWorkspaces
         , startupHook = setWMName "LG3D"
         , manageHook  = manageDocks <+> manageHook defaultConfig
         , layoutHook  = smartBorders layout
-        , logHook = dynamicLogWithPP xmobarPP { 
-                ppOutput  = hPutStrLn xmproc  
+        , logHook = dynamicLogWithPP xmobarPP {
+                ppOutput  = hPutStrLn xmproc
               , ppTitle   = xmobarColor highlightTextColor "" . shorten 100
               , ppCurrent = xmobarColor highlightTextColor "" . wrap "" ""
               , ppSep     = xmobarColor normalTextColor "" " | "
               , ppUrgent  = xmobarColor "#0000ff" ""
-              , ppLayout  = xmobarColor normalTextColor "" 
-          } 
+              , ppLayout  = xmobarColor normalTextColor ""
+          }
         , borderWidth        = 3
         , normalBorderColor  = borderNormalColor
         , focusedBorderColor = highlightTextColor
-        } 
+        }
         `additionalKeys` myKeys
 
 
-layout =     avoidStruts ((Mirror defaultTiling) ||| defaultTiling) 
+layout =     avoidStruts ((Mirror defaultTiling) ||| defaultTiling)
          ||| avoidStruts (noBorders Full)
          ||| fullscreenFull ( noBorders Full )
   where
@@ -52,7 +53,7 @@ layout =     avoidStruts ((Mirror defaultTiling) ||| defaultTiling)
      numberOnMaster = 1
      masterPaneSize = 1/2
      resizeDelta    = 3/100
- 
+
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
 screenshotSelectCommand = "~/.xmonad/screenshot-select.sh"
@@ -65,6 +66,6 @@ myKeys = [
       , ((0, 0x1008FF13),    spawn "amixer set Master 3+")
       , ((0, 0x1008FF12),    spawn "amixer set Master toggle")
     ] ++
-    [((m .|. modKey, k), windows $ f i) 
+    [((m .|. modKey, k), windows $ f i)
          | (i, k) <- zip myWorkspaces [xK_1 .. xK_9]
          , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
