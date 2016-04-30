@@ -1,0 +1,7 @@
+[user]
+	name = Thomas Smith
+	email = t.n.smith@student.tudelft.nl
+[push]
+	default = simple
+[core]
+	editor = subl
