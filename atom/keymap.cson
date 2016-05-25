@@ -1,0 +1,17 @@
+'atom-text-editor':
+  'ctrl-alt-b': 'unset!'
+'body':
+  'ctrl-q': 'unset!'
+'.platform-win32 atom-text-editor, .platform-linux atom-text-editor':
+  'ctrl-alt-q': 'unset!'
+
+'atom-text-editor[data-grammar~="haskell"]':
+  'ctrl-q': 'haskell-ghc-mod:show-type'
+  'ctrl-alt-q': 'haskell-ghc-mod:show-info'
+  'ctrl-alt-i': 'haskell-ghc-mod:insert-import'
+
+'atom-text-editor:not([mini])':
+  'ctrl-d': 'editor:delete-line'
+
+'.platform-linux':
+  'ctrl-alt': 'fuzzy-finder:toggle-file-finder'

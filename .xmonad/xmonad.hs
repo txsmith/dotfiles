@@ -17,6 +17,7 @@ modKey = mod4Mask
 borderNormalColor  = "#455A64"
 normalTextColor    = "#5E717A"
 highlightTextColor = "#20A294"
+myTerminal = "gnome-terminal"
 
 main = do
     xmproc <- spawnPipe "xmobar /home/thomas/.xmobarrc"
@@ -24,11 +25,13 @@ main = do
     spawn "dropbox start"
     spawn "xrandr --output VGA1 --primary --above LVDS1"
     spawn "nitrogen --restore"
+    spawn myTerminal
     xmonad $ defaultConfig {
           modMask     = modKey
         , workspaces  = myWorkspaces
         , startupHook = setWMName "LG3D"
         , manageHook  = manageDocks <+> manageHook defaultConfig
+        , handleEventHook = docksEventHook <+> handleEventHook defaultConfig
         , layoutHook  = smartBorders layout
         , logHook = dynamicLogWithPP xmobarPP {
                 ppOutput  = hPutStrLn xmproc
@@ -38,14 +41,15 @@ main = do
               , ppUrgent  = xmobarColor "#0000ff" ""
               , ppLayout  = xmobarColor normalTextColor ""
           }
-        , borderWidth        = 3
+        , borderWidth        = 2
         , normalBorderColor  = borderNormalColor
         , focusedBorderColor = highlightTextColor
+        , terminal = myTerminal
         }
         `additionalKeys` myKeys
 
 
-layout =     avoidStruts ((Mirror defaultTiling) ||| defaultTiling)
+layout =     avoidStruts (defaultTiling ||| (Mirror defaultTiling))
          ||| avoidStruts (noBorders Full)
          ||| fullscreenFull ( noBorders Full )
   where
