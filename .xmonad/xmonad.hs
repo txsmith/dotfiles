@@ -23,7 +23,8 @@ main = do
     xmproc <- spawnPipe "xmobar /home/thomas/.xmobarrc"
     spawn "nm-applet &"
     spawn "dropbox start"
-    spawn "xrandr --output VGA1 --primary --above LVDS1"
+    spawn "/usr/bin/numlockx"
+    -- spawn "xrandr --output HDMI-0 --rotate left --output DVI-D-0 --primary --pos 1080x395"
     spawn "nitrogen --restore"
     spawn myTerminal
     xmonad $ defaultConfig {
