@@ -42,6 +42,9 @@ COMPLETION_WAITING_DOTS="true"
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 HIST_STAMPS="dd.mm.yyyy"
 
+TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S'
+
+
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
@@ -111,3 +114,7 @@ alias glo='git log'
 alias gr='git reset'
 alias grh='git reset --hard'
 alias grho='git reset --hard origin/$(git_current_branch)'
+
+function ghc-flamegraph-render() {
+  cat "$1" | ghc-prof-flamegraph | flamegraph.pl > flame.svg
+}
