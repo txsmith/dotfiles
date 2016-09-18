@@ -1,4 +1,4 @@
-rite:~/Development/preview/rite-evaluation
+preview-frontend:~/Development/preview/rite-evaluation
 dev:~/Development
 pic:~/Pictures
 dl:~/Downloads
@@ -6,3 +6,4 @@ mnt:/media/thomas
 lexi:~/Development/Haskell/lexi
 tu:~/Development/TU
 hs:~/Development/Haskell
+dot:~/dotfiles
