@@ -1,0 +1,16 @@
+'.text':
+  'Parse Succeeds':
+    'prefix': 'psucc'
+    'body': '''
+      test ${1:name} [[${2:1+1}]] parse succeeds
+      $0'''
+  'Parse Fails':
+    'prefix': 'pfail'
+    'body': '''
+      test ${1:name} [[${2:1+1}]] parse fails
+      $0'''
+  'Parse Equal':
+    'prefix': 'peq'
+    'body': '''
+      test ${1:name} [[${2:1 + (2 + 3)}]] parse to [[${4:(1 + 2) + 3}]]
+      $0'''
