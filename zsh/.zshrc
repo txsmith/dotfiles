@@ -109,11 +109,15 @@ bindkey '^[[1;3A'      cdParentKey
 # redefine prompt_context for hiding user@hostname
 prompt_context () { }
 
+# Git alisaes
 alias gpu='git push --set-upstream origin $(git_current_branch)'
 alias glo='git log'
 alias gr='git reset'
 alias grh='git reset --hard'
 alias grho='git reset --hard origin/$(git_current_branch)'
+
+# Other aliases
+alias xo='xdg-open'
 
 function ghc-flamegraph-render() {
   cat "$1" | ghc-prof-flamegraph | flamegraph.pl > flame.svg
