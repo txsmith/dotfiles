@@ -6,8 +6,8 @@
   'ctrl-alt-q': 'unset!'
 
 'atom-text-editor[data-grammar~="haskell"]':
-  'ctrl-q': 'haskell-ghc-mod:show-type'
-  'ctrl-alt-q': 'haskell-ghc-mod:show-info'
+  'alt-=': 'haskell-ghc-mod:show-type'
+  'ctrl-shift-=': 'haskell-ghc-mod:show-info'
   'ctrl-alt-i': 'haskell-ghc-mod:insert-import'
 
 'atom-text-editor:not([mini])':

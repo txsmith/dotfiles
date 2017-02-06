@@ -57,7 +57,7 @@ plugins=(git gitfast dirhistory mvn npm sudo web-search wd stack)
 # User configuration
 
   export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/thomas/.local/bin"
-# export MANPATH="/usr/local/man:$MANPATH"
+  export PATH="/home/thomas/.npm-global/bin:$PATH"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -118,6 +118,7 @@ alias grho='git reset --hard origin/$(git_current_branch)'
 
 # Other aliases
 alias xo='xdg-open'
+alias dist-upgrade='sudo apt-get update && sudo apt-get dist-upgrade'
 
 function ghc-flamegraph-render() {
   cat "$1" | ghc-prof-flamegraph | flamegraph.pl > flame.svg
