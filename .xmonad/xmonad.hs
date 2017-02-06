@@ -24,7 +24,6 @@ main = do
     spawn "nm-applet &"
     spawn "dropbox start"
     spawn "/usr/bin/numlockx"
-    -- spawn "xrandr --output HDMI-0 --rotate left --output DVI-D-0 --primary --pos 1080x395"
     spawn "nitrogen --restore"
     spawn myTerminal
     xmonad $ defaultConfig {
