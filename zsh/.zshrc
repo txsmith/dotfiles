@@ -58,6 +58,8 @@ plugins=(git gitfast dirhistory mvn npm sudo web-search wd stack)
 
   export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/thomas/.local/bin"
   export PATH="/home/thomas/.npm-global/bin:$PATH"
+  export PATH="/home/thomas/npm-global/bin:$PATH"
+  export PATH="$HOME/.cargo/bin:$PATH"
 
 source $ZSH/oh-my-zsh.sh
 

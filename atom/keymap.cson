@@ -9,9 +9,22 @@
   'alt-=': 'haskell-ghc-mod:show-type'
   'ctrl-shift-=': 'haskell-ghc-mod:show-info'
   'ctrl-alt-i': 'haskell-ghc-mod:insert-import'
+  'ctrl-shift-P': 'haskell-pointfree:toggle'
+  'alt-d': 'haskell-ghc-mod:go-to-declaration'
 
 'atom-text-editor:not([mini])':
   'ctrl-d': 'editor:delete-line'
 
+'atom-workspace atom-text-editor:not([mini])':
+  'alt-f': 'editor:fold-selection'
+
 '.platform-linux':
   'ctrl-alt': 'fuzzy-finder:toggle-file-finder'
+'atom-workspace':
+  'alt-c': 'copy-with-syntax:copy'
+
+'.platform-win32 atom-text-editor, .platform-linux atom-text-editor':
+  'alt-r': 'autoflow:reflow-selection'
+
+'.platform-linux atom-workspace':
+  'ctrl-shift-c': 'color-picker:open'
