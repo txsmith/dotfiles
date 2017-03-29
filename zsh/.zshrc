@@ -121,6 +121,7 @@ alias grho='git reset --hard origin/$(git_current_branch)'
 # Other aliases
 alias xo='xdg-open'
 alias dist-upgrade='sudo apt-get update && sudo apt-get dist-upgrade'
+alias lock='gnome-screensaver-command -l'
 
 function ghc-flamegraph-render() {
   cat "$1" | ghc-prof-flamegraph | flamegraph.pl > flame.svg

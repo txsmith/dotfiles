@@ -60,7 +60,7 @@ layout =     avoidStruts (defaultTiling ||| (Mirror defaultTiling))
 
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
-screenshotSelectCommand = "~/.xmonad/screenshot-select.sh"
+screenshotSelectCommand = "gnome-screenshot -a"
 screenshotWindowCommand = "~/.xmonad/screenshot-window.sh"
 
 myKeys = [
