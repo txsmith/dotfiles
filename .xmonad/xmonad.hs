@@ -60,11 +60,11 @@ layout =     avoidStruts (defaultTiling ||| (Mirror defaultTiling))
 
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
 
-screenshotSelectCommand = "gnome-screenshot -a"
-screenshotWindowCommand = "~/.xmonad/screenshot-window.sh"
+screenshotSelectCommand = "gnome-screenshot -i"
+screenshotWindowCommand = "gnome-screenshot -i -c"
 
 myKeys = [
-        ((modKey, xK_Print),               spawn screenshotSelectCommand)
+        ((modKey, xK_Print),                   spawn screenshotSelectCommand)
       , ((modKey .|. shiftMask, xK_Print), spawn screenshotWindowCommand)
       , ((0, 0x1008FF11),    spawn "amixer set Master 3-")
       , ((0, 0x1008FF13),    spawn "amixer set Master 3+")
