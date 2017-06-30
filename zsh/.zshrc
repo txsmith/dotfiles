@@ -124,5 +124,5 @@ alias dist-upgrade='sudo apt-get update && sudo apt-get dist-upgrade'
 alias lock='gnome-screensaver-command -l'
 
 function ghc-flamegraph-render() {
-  cat "$1" | ghc-prof-flamegraph | flamegraph.pl > flame.svg
+  cat "$1" | ghc-prof-flamegraph | flamegraph.pl > $1.svg
 }
