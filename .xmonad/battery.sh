@@ -1,2 +1,0 @@
-#!/bin/bash
-upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "percentage:" | sed 's/\s*[a-z]*:\s*//g'
