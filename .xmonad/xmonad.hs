@@ -8,11 +8,15 @@ import XMonad
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.Place (placeHook, fixed)
+
 import XMonad.Actions.SpawnOn (manageSpawn)
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.NamedActions (addDescrKeys')
+
+import XMonad.Actions.Navigation2D (withNavigation2DConfig)
+import XMonad.Layout.Fullscreen (fullscreenManageHook)
 
 import System.IO
 import Data.Monoid
@@ -33,6 +37,7 @@ main = do
     -- spawn "nm-applet &"
 
     xmonad $ 
+      withNavigation2DConfig myNav2DConf $ 
       ewmh $
       addDescrKeys' ((myModMask, xK_F1), showKeybindings) KeyBinds.myKeys $
       myConfig xmproc
@@ -52,6 +57,7 @@ myConfig p = def
         , logHook            = myLogHook p
         , startupHook        = myStartupHook
 
+        , mouseBindings      = myMouseBindings
         , modMask            = myModMask
         , terminal           = myTerminal
         , workspaces         = myWorkspaces
@@ -64,23 +70,27 @@ isSpotify = do
   trace $ "CLASS IS:" ++ c
   return $ ("spotify" `isPrefixOf`) $ (toLower <$> c)
 
-isLauncher = stringProperty "WM_NAME" =? "rofi"
+isLauncher = stringProperty "WM_NAME" =? "Terminal"
 
 myManageHook :: ManageHook
-myManageHook = 
-  manageSpawn <+>
+myManageHook = do
+  manageDocks
+  fullscreenManageHook
+  manageSpawn
   composeAll [ 
-      -- (isLauncher <||> isSpotify) --> doFullFloat
-  ] 
+      (isLauncher <||> isSpotify) --> ((placeHook $ fixed (1, 0))) -- 
+    ] 
   -- manageHook def
 
 myHandleEventHook :: Event -> X All
-myHandleEventHook = docksEventHook <> handleEventHook def
+myHandleEventHook = do 
+  docksEventHook
+  handleEventHook def
 
 
 myLogHook :: Handle -> X ()
 myLogHook xmproc = do
-  fadeInactiveLogHook 0.95
+  ewmhDesktopsLogHook
   dynamicLogWithPP xmobarPP {
         ppOutput  = hPutStrLn xmproc
       , ppTitle   = const ""

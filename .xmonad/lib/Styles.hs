@@ -3,6 +3,8 @@
 module Styles where 
 import GHC.Word
 import XMonad.Prompt
+import XMonad.Layout.Tabbed
+import XMonad.Layout.Decoration
 
 base03  = "#002b36"
 base02  = "#073642"
@@ -20,9 +22,12 @@ violet  = "#6c71c4"
 blue    = "#268bd2"
 cyan    = "#2aa198"
 green   = "#859900"
+white   = "#ffffff"
 
-gap    = 10
-topbar = 10
+gap :: Int
+gap    = 15
+
+topbar = 4
 border = 0
 prompt = 24
 status = 20
@@ -33,8 +38,7 @@ inactive     = base02
 focusColor   = blue
 unfocusColor = base02
 
-myFont = "xft:SFNS Display:size=16"
-
+myFont = "xft:SFNS Display:style=Regular:size=11"
 
 myNormalBorderColor  = "#455A64"
 myNormalTextColor    = "#5E717A"
@@ -44,6 +48,31 @@ xmobarCurrentWorkspaceColor = "#Af745f"
 myBorderWidth :: Word32
 myBorderWidth = 0
 
+
+topBarTheme :: XMonad.Layout.Decoration.Theme
+topBarTheme = def
+    { fontName              = myFont
+    , inactiveBorderColor   = base03
+    , inactiveColor         = base03
+    , inactiveTextColor     = base03
+    , activeBorderColor     = active
+    , activeColor           = active
+    , activeTextColor       = active
+    , urgentBorderColor     = red
+    , urgentTextColor       = white
+    , decoHeight            = topbar
+    }
+
+myTabTheme :: XMonad.Layout.Tabbed.Theme
+myTabTheme = def
+    { fontName              = myFont
+    , activeColor           = active
+    , inactiveColor         = base02
+    , activeBorderColor     = active
+    , inactiveBorderColor   = base02
+    , activeTextColor       = base03
+    , inactiveTextColor     = base00
+    }
 
 myPromptTheme = def
     { font                  = myFont
