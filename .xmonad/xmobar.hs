@@ -1,12 +1,12 @@
 
 Config { 
-    font = "xft:SFNS Display:size=10"
+    font = "xft:SFNS Display:size=11:antialias=true"
   , additionalFonts = ["xft:FontAwesome:size=11:antialias=true"]
   , border = NoBorder
   , allDesktops = True
   , overrideRedirect = True
   , alpha = 0
-  , bgColor = "#2f343f"
+  , bgColor = "#efefef"
   , fgColor = "#2f343f"
   , position = TopSize C 100 24
   , lowerOnStart = True
@@ -14,7 +14,7 @@ Config {
   , commands = 
     [ Run Battery [
           "--template" , "<acstatus>",
-          "--Low"      , "10",       -- units: %
+          "--Low"      , "20",       -- units: %
           "--High"     , "50",       -- units: %
           "--low"      , "darkred",
           "--normal"   , "darkorange",
@@ -40,12 +40,12 @@ Config {
           "-c", "#2f343f",
           "-C", "#2f343f"
         ] 10
-      , Run Wireless "enp11s0" [
+      , Run Wireless "wlan0" [
           "-t", "<fn=1>\xf1eb</fn>  <essid>",
           "-x", "Not Connected"
         ] 10
     ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "  %UnsafeStdinReader% } %date% { %enp11s0wi%    %default:Master%    %battery%    <action=`oblogout` button=1><fn=1><raw=1:/></fn></action>  "
+  , template = "  %UnsafeStdinReader% } %date% { %wlan0wi%    %default:Master%    %battery%    <action=`oblogout` button=1><fn=1><raw=1:/></fn></action>  "
 }

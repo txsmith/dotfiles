@@ -25,6 +25,8 @@ showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
 showKeybindings x = addName "Show Keybindings" $ displayKeybindings x
 
 
+myModMask = mod4Mask
+
 myKeys :: XConfig Layout -> [((KeyMask, KeySym), NamedAction)]
 myKeys conf = systemKeys ^++^ actionKeys ^++^ launcherKeys ^++^ windowKeys ^++^ layoutKeys
   where
@@ -75,6 +77,7 @@ myKeys conf = systemKeys ^++^ actionKeys ^++^ launcherKeys ^++^ windowKeys ^++^ 
 
     launcherKeys = subKeys "Launchers"
       [ ("M-<Space>", addName "Launcher" $ spawn myLauncher)
+      , ("M-S-<Space>", addName "DRUN Launcher" $ spawn myDrunLauncher)
       , ("M-<Return>", addName "Terminal" $ spawn myTerminal)
       , ("M-\\", addName "Browser" $ spawn myBrowser)
       ]
@@ -83,27 +86,23 @@ myKeys conf = systemKeys ^++^ actionKeys ^++^ launcherKeys ^++^ windowKeys ^++^ 
       [ ("M-<Backspace>", addName "Kill" kill1)
       , ("M-S-<Backspace>", addName "Kill all" $ confirmPrompt hotPromptTheme "kill all" $ killAll)
       , ("M-p", addName "Hide window to stack" $ withFocused hideWindow)
-      , ("M-<Tab>-p", addName "Pop window from hidden stack" $ popNewestHiddenWindow)
+      , ("M-S-p", addName "Pop window from hidden stack" $ popNewestHiddenWindow)
       , ("M-g", addName "Un-merge from sublayout" $ withFocused (sendMessage . UnMerge))
       , ("M-S-g", addName "Merge all into sublayout" $ withFocused (sendMessage . MergeAll))
       , ("M-m", addName "Focus master" $ windows W.focusMaster)
       -- , ("M-'", addName "Navigate tabs D" $ bindOn LD [("Tabs", windows W.focusDown), ("", onGroup W.focusDown')])
       -- , ("M-;", addName "Navigate tabs U" $ bindOn LD [("Tabs", windows W.focusUp), ("", onGroup W.focusUp')])
-      , ("C-'", addName "Swap tab D" $ windows W.swapDown)
-      , ("C-;", addName "Swap tab U" $ windows W.swapUp)
+      , ("M-<Tab>", addName "Navigate next window" $ windows W.focusUp )
+      , ("M-S-<Tab>", addName "Swap next window" $ windows W.swapUp )
       ] ++ zipM' "M-" "Navigate window" dirKeys dirs windowGo True
         ++ zipM' "M-S-" "Move window" dirKeys dirs windowSwap True
 
       )
 
     layoutKeys = subKeys "Layout Management"
-      [ ("M-<Tab>"                , addName "Cycle all layouts"               $ sendMessage NextLayout)
-      , ("M-C-<Tab>"              , addName "Cycle sublayout"                 $ toSubl NextLayout)
-      , ("M-S-<Tab>"              , addName "Reset layout"                    $ setLayout $ XMonad.layoutHook conf)
+      [ ("M-y", addName "Float tiled w" $ withFocused toggleFloat)
+      , ("M-S-y", addName "Tile all floating w"$ sinkAll)
 
-      , ("M-y"                    , addName "Float tiled w"                   $ withFocused toggleFloat)
-      , ("M-S-y"                  , addName "Tile all floating w"             $ sinkAll)
-
-      , ("M-,"                    , addName "Decrease master windows"         $ sendMessage (IncMasterN (-1)))
-      , ("M-."                    , addName "Increase master windows"         $ sendMessage (IncMasterN 1))
+      , ("M-,", addName "Decrease master windows" $ sendMessage (IncMasterN (-1)))
+      , ("M-.", addName "Increase master windows" $ sendMessage (IncMasterN 1))
       ]

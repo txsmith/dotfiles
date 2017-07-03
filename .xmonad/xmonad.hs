@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+{-# LANGUAGE TypeSynonymInstances, MultiParamTypeClasses #-}
 
 module Main where
 
@@ -8,26 +9,20 @@ import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.FadeInactive (fadeInactiveLogHook)
-
-import XMonad.Layout.NoBorders
-import XMonad.Layout.Fullscreen (fullscreenFull)
-import XMonad.Layout.SubLayouts (subTabbed)
-import XMonad.Layout.WindowNavigation (windowNavigation)
-import XMonad.Layout.BoringWindows (boringWindows)
-import XMonad.Layout.Spacing (spacing)
-import XMonad.Layout.Gaps (gaps)
-
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Actions.SpawnOn (manageSpawn)
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.NamedActions (addDescrKeys')
-import XMonad.Layout.Hidden (hiddenWindows)
+
 import System.IO
 import Data.Monoid
+import Data.List (isPrefixOf)
+import Data.Char (toLower)
 
 import KeyBinds
 import Actions
 import Styles
-
-myModMask = mod4Mask
+import Layout
 
 myFocusFollowsMouse = True
 myClickJustFocuses = False
@@ -35,13 +30,10 @@ myClickJustFocuses = False
 main :: IO ()
 main = do
     xmproc <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
-    spawn "nm-applet &"
-    spawn "dropbox start"
-    spawn "/usr/bin/numlockx"
-    spawn "nitrogen --restore"
-    -- spawn myTerminal
+    -- spawn "nm-applet &"
 
     xmonad $ 
+      ewmh $
       addDescrKeys' ((myModMask, xK_F1), showKeybindings) KeyBinds.myKeys $
       myConfig xmproc
 
@@ -61,52 +53,46 @@ myConfig p = def
         , startupHook        = myStartupHook
 
         , modMask            = myModMask
-        -- , mouseBindings      = myMouseBindings
         , terminal           = myTerminal
         , workspaces         = myWorkspaces
         }
 
 
 
+isSpotify = do
+  c <- stringProperty "WM_NAME"
+  trace $ "CLASS IS:" ++ c
+  return $ ("spotify" `isPrefixOf`) $ (toLower <$> c)
+
+isLauncher = stringProperty "WM_NAME" =? "rofi"
+
 myManageHook :: ManageHook
-myManageHook = manageDocks <> manageHook def
+myManageHook = 
+  manageSpawn <+>
+  composeAll [ 
+      -- (isLauncher <||> isSpotify) --> doFullFloat
+  ] 
+  -- manageHook def
 
 myHandleEventHook :: Event -> X All
 myHandleEventHook = docksEventHook <> handleEventHook def
 
 
-myLayoutHook = smartBorders layout
-
-
 myLogHook :: Handle -> X ()
 myLogHook xmproc = do
-  fadeInactiveLogHook 0.5
+  fadeInactiveLogHook 0.95
   dynamicLogWithPP xmobarPP {
         ppOutput  = hPutStrLn xmproc
-      , ppTitle   = const "" --xmobarColor myHighlightTextColor "" . shorten 100
-      , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""-- xmobarColor myHighlightTextColor "" . wrap "" ""
+      , ppTitle   = const ""
+      , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
       , ppSep     = "   "
-      , ppLayout  = const ""  --xmobarColor myNormalTextColor ""
+      , ppLayout  = const ""
   }
 
 myStartupHook :: X ()
 myStartupHook = do
+  spawn "compton --backend glx --config ~/compton.conf"
   setWMName "LG3D"
 
-layout = (lessBorders OnlyFloat
-               . avoidStruts
-               . spacing 15
-               . gaps [(U,15), (D,15), (R,15), (L,15)])
-               (Tall 1 (3/100) (1/2))
-         ||| avoidStruts (defaultTiling ||| (noBorders Full))
-         ||| fullscreenFull ( noBorders Full )
-  where
-     defaultTiling  = windowNavigation $ subTabbed $ boringWindows $ hiddenWindows $ Tall numberOnMaster resizeDelta masterPaneSize
-     numberOnMaster = 1
-     masterPaneSize = 1/2
-     resizeDelta    = 3/100
 
 myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
-
-screenshotSelectCommand = "gnome-screenshot -i"
-screenshotWindowCommand = "gnome-screenshot -i -c"

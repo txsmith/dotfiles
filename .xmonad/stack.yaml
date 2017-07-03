@@ -2,9 +2,10 @@ resolver: lts-8.5
 flags:
   xmonad-contrib:
     testing: false
-    use_xft: false
+    use_xft: true
   xmonad:
     testing: false
+    use_xft: true
 extra-deps:
   - xmonad-0.13
   - xmonad-contrib-0.13

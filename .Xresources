@@ -1,0 +1,17 @@
+! ------------------------------------------------------------------------------
+! ROFI Color theme
+! ------------------------------------------------------------------------------
+rofi.color-enabled: true
+rofi.width: 480
+rofi.lines: 10
+! rofi.fuzzy: true
+rofi.padding: 16
+rofi.line-margin: 8
+rofi.separator-style: solid
+! rofi.hide-scrollbar: true
+rofi.font: SFNS Display Regular 14
+rofi.kb-remove-word-back: Control+BackSpace
+rofi.color-window: argb:a0ffffff, argb:20282828, argb:20282828
+rofi.color-normal: argb:0fdf6e3, #282828, argb:0eee8d5, argb:20282828, #282828
+rofi.color-active: argb:0fdf6e3, #000000, argb:5eee8d5, argb:0d2b726, #fdf6e3
+rofi.color-urgent: argb:0fdf6e3, #dc322f, argb:0eee8d5, argb:0dc322f, #fdf6e3

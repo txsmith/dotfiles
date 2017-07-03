@@ -19,12 +19,12 @@ magenta = "#d33682"
 violet  = "#6c71c4"
 blue    = "#268bd2"
 cyan    = "#2aa198"
-green       = "#859900"
+green   = "#859900"
 
 gap    = 10
 topbar = 10
 border = 0
-prompt = 20
+prompt = 24
 status = 20
 
 active       = blue
@@ -33,7 +33,7 @@ inactive     = base02
 focusColor   = blue
 unfocusColor = base02
 
-myFont = "xft:Source Code Pro:style=Regular:pixelsize=12:hinting=true"
+myFont = "xft:SFNS Display:size=16"
 
 
 myNormalBorderColor  = "#455A64"
@@ -42,7 +42,7 @@ myHighlightTextColor = "#20A294"
 xmobarCurrentWorkspaceColor = "#Af745f"
 
 myBorderWidth :: Word32
-myBorderWidth = 2
+myBorderWidth = 0
 
 
 myPromptTheme = def
@@ -59,7 +59,7 @@ myPromptTheme = def
 
 hotPromptTheme :: XPConfig
 hotPromptTheme = myPromptTheme
-    { bgColor               = red
-    , fgColor               = base3
-    , position              = Top
+    { bgColor  = red
+    , fgColor  = base3
+    , position = Top
     }

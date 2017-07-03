@@ -1,2 +1,4 @@
 xmodmap ~/.Xmodmap
 feh --bg-scale ~/dotfiles/wallpapers/os_x_yosemite.jpg
+dropbox start
+numlockx

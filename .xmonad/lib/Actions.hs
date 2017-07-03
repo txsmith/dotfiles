@@ -26,10 +26,14 @@ rebuildRestart :: MonadIO m => m ()
 rebuildRestart = spawn "xmonad --recompile && xmonad --restart"
 
 lockScreen :: MonadIO m => m ()
-lockScreen = spawn "xset s activate"
+lockScreen = spawn "gnome-screensaver-command --lock"
 
 myTerminal = "gnome-terminal"
 
 myBrowser = "google-chrome"
 
-myLauncher = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
+myLauncher = "rofi -modi combi -show combi -combi-modi run,drun"
+myDrunLauncher = "rofi -modi drun -show drun"
+
+screenshotSelectCommand = "gnome-screenshot -i"
+screenshotWindowCommand = "gnome-screenshot -i -c"
