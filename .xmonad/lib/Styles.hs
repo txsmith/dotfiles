@@ -43,7 +43,9 @@ myFont = "xft:SFNS Display:style=Regular:size=11"
 myNormalBorderColor  = "#455A64"
 myNormalTextColor    = "#5E717A"
 myHighlightTextColor = "#20A294"
-xmobarCurrentWorkspaceColor = "#Af745f"
+xmobarCurrentWorkspaceColor = "#d68224"
+xmobarHiddenWorkspaceColor = "#4f5666"
+xmobarTextColor = "#2f343f"
 
 myBorderWidth :: Word32
 myBorderWidth = 0

@@ -10,7 +10,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      lib
-  exposed-modules:     KeyBinds, Styles, Actions, Layout
+  exposed-modules:     KeyBinds, Styles, Actions, Layout, Workspaces
   build-depends:       base >= 4.7 && < 5
                      , xmonad, xmonad-contrib
                      , containers

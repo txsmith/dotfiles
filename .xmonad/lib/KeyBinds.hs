@@ -1,12 +1,17 @@
 module KeyBinds where
 
 import XMonad
+import XMonad.Core
 import XMonad.Operations (windows)
 import qualified XMonad.StackSet as W
 
 import XMonad.Util.NamedActions
 import XMonad.Util.EZConfig (mkNamedKeymap)
+import XMonad.Util.WorkspaceCompare (getSortByIndex)
+import XMonad.Util.NamedScratchpad (namedScratchpadFilterOutWorkspace)
+
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
+import XMonad.Prompt.XMonad (xmonadPromptC)
 
 import XMonad.Actions.CopyWindow (kill1)
 import XMonad.Actions.WithAll (killAll, sinkAll)
@@ -14,7 +19,9 @@ import XMonad.Actions.Navigation2D (Direction2D(D, U, L, R), windowGo, windowSwa
 import XMonad.Actions.Promote (promote)
 import qualified XMonad.Actions.ConstrainedResize as Sqr
 import XMonad.Actions.FloatSnap (ifClick, snapMagicMove, snapMagicResize)
-
+import XMonad.Actions.DynamicWorkspaces (withNthWorkspace, removeWorkspace, removeWorkspaceByTag)
+import XMonad.Actions.DynamicProjects (switchProjectPrompt, shiftToProjectPrompt, renameProjectPrompt)
+import XMonad.Actions.CycleWS (Direction1D(Next, Prev), WSType(..), toggleWS, findWorkspace, nextScreen, swapNextScreen)
 import XMonad.Layout.Hidden (hideWindow, popNewestHiddenWindow)
 import XMonad.Layout.SubLayouts (GroupMsg(MergeAll, UnMerge), toSubl, onGroup, pullGroup)
 import XMonad.Layout.MultiToggle (Toggle(Toggle))
@@ -23,7 +30,10 @@ import qualified Data.Map as M
 
 import Styles
 import Actions
+import Layout
 import Data.List (find)
+import Data.Maybe (isNothing)
+import Control.Monad (when)
 
 -- Display keyboard mappings using zenity
 -- from https://github.com/thomasf/dotfiles-thomasf-xmonad/
@@ -31,11 +41,12 @@ import Data.List (find)
 showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
 showKeybindings x = addName "Show Keybindings" $ displayKeybindings x
 
-
+myModMask :: KeyMask
 myModMask = mod4Mask
 
 myKeys :: XConfig Layout -> [((KeyMask, KeySym), NamedAction)]
-myKeys conf = systemKeys ^++^ actionKeys ^++^ launcherKeys ^++^ windowKeys ^++^ layoutKeys
+myKeys conf = systemKeys ^++^ launcherKeys 
+            ^++^ windowKeys ^++^ layoutKeys ^++^ workspaceKeys
   where
 
     subKeys str ks = subtitle str : mkNamedKeymap conf ks
@@ -55,12 +66,14 @@ myKeys conf = systemKeys ^++^ actionKeys ^++^ launcherKeys ^++^ windowKeys ^++^ 
       [ ("M-q"     , addName "Restart XMonad" Actions.restart)
       , ("M-C-q"   , addName "Rebuild & restart XMonad" rebuildRestart)
       , ("M-S-q"   , addName "Quit XMonad" $ confirmPrompt hotPromptTheme "Quit XMonad" exit)
-      , ("M-x"     , addName "Lock screen" $ lockScreen)
+      , ("M-x"     , addName "Lock screen options" $ xmonadPromptC [
+                      ("Lock", lockScreen)
+                    , ("Shutdown", shutdown)
+                    , ("Logout", exit)
+                    , ("Reboot", reboot)
+                    ] myPromptTheme)
       ]
     
-    actionKeys = subKeys "Actions"
-      [ ]
-
     launcherKeys = subKeys "Launchers"
       [ ("M-<Space>", addName "Launcher" $ spawn myLauncher)
       , ("M-S-<Space>", addName "DRUN Launcher" $ spawn myDrunLauncher)
@@ -70,10 +83,10 @@ myKeys conf = systemKeys ^++^ actionKeys ^++^ launcherKeys ^++^ windowKeys ^++^ 
 
     windowKeys = subKeys "Windows" (
       [ ("M-<Backspace>", addName "Kill" kill1)
-      , ("M-S-<Backspace>", addName "Kill all" $ confirmPrompt hotPromptTheme "kill all" $ killAll)
+      , ("M-S-<Backspace>", addName "Kill all" $ confirmPrompt hotPromptTheme "kill all" killAll)
 
-      , ("M-p", addName "Hide window to stack" $ withFocused hideWindow)
-      , ("M-S-p", addName "Pop window from hidden stack" $ popNewestHiddenWindow)
+      , ("M-h", addName "Hide window to stack" $ withFocused hideWindow)
+      , ("M-S-h", addName "Pop window from hidden stack" $ popNewestHiddenWindow)
 
       , ("M-g", addName "Un-merge from sublayout" $ withFocused (sendMessage . UnMerge))
       , ("M-S-g", addName "Merge all into sublayout" $ withFocused (sendMessage . MergeAll))
@@ -88,7 +101,7 @@ myKeys conf = systemKeys ^++^ actionKeys ^++^ launcherKeys ^++^ windowKeys ^++^ 
       
       -- Windows
       , ("M-<Tab>", addName "Navigate next window" $ windows W.focusUp )
-      , ("M-S-<Tab>", addName "Swap next window" $ windows W.swapUp )
+      , ("M-S-<Tcab>", addName "Swap next window" $ windows W.swapUp )
       ] 
         -- Move / Navigate thourgh windows with M-<w,s,a,d>
         ++ zipM' "M-" "Navigate window" dirKeys dirs windowGo True
@@ -107,13 +120,45 @@ myKeys conf = systemKeys ^++^ actionKeys ^++^ launcherKeys ^++^ windowKeys ^++^ 
       
       , ("M-f", addName "Fullscreen" $ sequence_ [ (withFocused $ windows . W.sink)
                                                  , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULL) ])
-      
+      , ("M-S-f", addName "Fullscreen" $ sequence_ [ (withFocused $ windows . W.sink)
+                                                 , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULLBAR) ])
+
       , ("M-`", addName "Cycle layouts " $ sendMessage NextLayout)
       , ("M-S-`", addName "Cycle sublayouts " $ toSubl NextLayout)
       
       , ("M-,", addName "Decrease master windows" $ sendMessage (IncMasterN (-1)))
       , ("M-.", addName "Increase master windows" $ sendMessage (IncMasterN 1))
       ]
+
+    workspaceKeys = subKeys "Workspaces & Projects" (
+      [ ("M-p", addName "Switch to Project" $ switchProjectPrompt myPromptTheme)
+      , ("M-S-p", addName "Shift to Project" $ shiftToProjectPrompt myPromptTheme)
+      , ("M-C-p", addName "Rename Project" $ renameProjectPrompt myPromptTheme)
+      , ("M-C-<Backspace>", addName "Remove Project" $ confirmPrompt hotPromptTheme "Remove Workspace?" $ removeWorkspace)
+      , ("M-l", addName "Toggle last workspace" toggleWS)
+      , ("M-=", addName "Next non-empty workspace" nextNonEmptyWS)
+      , ("M--", addName "Prev non-empty workspace" prevNonEmptyWS)
+      , ("M-e", addName "Next visible workspace" $ nextScreen)
+      , ("M-S-e", addName "Next visible workspace" $ swapNextScreen)
+      ]
+        ++ zipM "M-" "View      ws" wsKeys [0..] (withNthWorkspace W.view)
+        ++ zipM "M-S-" "Move w to ws" wsKeys [0..] (withNthWorkspace W.shift)
+      )
+    
+    wsKeys = show <$> [1..9] ++ [0]
+
+    nextNonEmptyWS = do
+      t <- findWorkspace getSortByIndexNoSP Next HiddenWS 1
+      windows $ W.view t
+
+    prevNonEmptyWS = do
+      t <- findWorkspace getSortByIndexNoSP Prev HiddenWS 1
+      windows $ W.view t
+
+    getSortByIndexNoSP =
+            fmap (. namedScratchpadFilterOutWorkspace) getSortByIndex
+            
+
 
 -- Mouse bindings: default actions bound to mouse events
 -- Includes window snapping on move/resize using X.A.FloatSnap

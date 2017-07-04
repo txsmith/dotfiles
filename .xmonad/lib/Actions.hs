@@ -28,9 +28,23 @@ rebuildRestart = spawn "xmonad --recompile && xmonad --restart"
 lockScreen :: MonadIO m => m ()
 lockScreen = spawn "gnome-screensaver-command --lock"
 
+shutdown :: MonadIO m => m ()
+shutdown = spawn "poweroff"
+
+reboot :: MonadIO m => m ()
+reboot = spawn "reboot"
+
 myTerminal = "gnome-terminal"
 
-myBrowser = "google-chrome"
+myBrowser = "google-chrome-stable"
+
+myMusic = "spotify"
+
+myTelegram = "tg"
+
+mySlack = "slack"
+
+myIntelliJ = "IntelliJ"
 
 myLauncher = "rofi -modi combi -show combi -combi-modi run,drun"
 myDrunLauncher = "rofi -modi drun -show drun"
