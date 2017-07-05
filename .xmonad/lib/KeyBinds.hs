@@ -2,7 +2,7 @@ module KeyBinds where
 
 import XMonad
 import XMonad.Core
-import XMonad.Operations (windows)
+import XMonad.Operations (windows, sendMessage)
 import qualified XMonad.StackSet as W
 
 import XMonad.Util.NamedActions
@@ -26,6 +26,7 @@ import XMonad.Layout.Hidden (hideWindow, popNewestHiddenWindow)
 import XMonad.Layout.SubLayouts (GroupMsg(MergeAll, UnMerge), toSubl, onGroup, pullGroup)
 import XMonad.Layout.MultiToggle (Toggle(Toggle))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(FULL))
+import XMonad.Hooks.ManageDocks (SetStruts(..))
 import qualified Data.Map as M 
 
 import Styles
@@ -65,8 +66,7 @@ myKeys conf = systemKeys ^++^ launcherKeys
     systemKeys = subKeys "System"
       [ ("M-q"     , addName "Restart XMonad" Actions.restart)
       , ("M-C-q"   , addName "Rebuild & restart XMonad" rebuildRestart)
-      , ("M-S-q"   , addName "Quit XMonad" $ confirmPrompt hotPromptTheme "Quit XMonad" exit)
-      , ("M-x"     , addName "Lock screen options" $ xmonadPromptC [
+      , ("M-S-q"   , addName "Quit XMonad" $ xmonadPromptC [
                       ("Lock", lockScreen)
                     , ("Shutdown", shutdown)
                     , ("Logout", exit)
@@ -165,7 +165,8 @@ myKeys conf = systemKeys ^++^ launcherKeys
 -- Includes window w/h ratio constraint (square) using X.H.ConstrainedResize
 myMouseBindings (XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
-    [ ((myModMask,               button1) ,(\w -> focus w
+    [ 
+      ((myModMask,               button1) ,(\w -> focus w
       >> mouseMoveWindow w
       >> ifClick (snapMagicMove (Just 50) (Just 50) w)
       >> windows W.shiftMaster))

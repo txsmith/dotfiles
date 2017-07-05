@@ -2,3 +2,4 @@
 \#*
 .xmonad/xmonad
 .xmonad/xmonad-contrib
+xmonad.state

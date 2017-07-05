@@ -4,13 +4,11 @@
 module Main where
 
 import XMonad
-import qualified XMonad.StackSet as W
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.Place (placeHook, fixed)
-import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
 
 import XMonad.Actions.SpawnOn (manageSpawn)
 import XMonad.Util.Run(spawnPipe)
@@ -19,8 +17,6 @@ import XMonad.Util.WorkspaceCompare
 
 import XMonad.Actions.Navigation2D (withNavigation2DConfig)
 import XMonad.Actions.DynamicProjects (dynamicProjects)
-
-import XMonad.Layout.Fullscreen (fullscreenManageHook, fullscreenEventHook)
 
 import System.IO
 import Data.Monoid
@@ -82,16 +78,14 @@ myManageHook = do
   manageDocks
   manageSpawn
   composeAll [ 
-      isFullscreen --> doFullFloat
-    , (isLauncher <||> isSpotify) --> ((placeHook $ fixed (1, 0))) -- 
+    (isLauncher <||> isSpotify) --> ((placeHook $ fixed (1, 0))) -- 
     ] 
   -- manageHook def
 
 myHandleEventHook :: Event -> X All
 myHandleEventHook = do 
   docksEventHook
-  XMonad.Hooks.EwmhDesktops.fullscreenEventHook
-  handleEventHook def
+  -- handleEventHook def
 
 
 myLogHook :: Handle -> X ()
@@ -122,5 +116,3 @@ myStartupHook :: X ()
 myStartupHook = do
   spawn "compton --backend glx --config ~/compton.conf"
   setWMName "LG3D"
-  ewmhDesktopsStartup
-
