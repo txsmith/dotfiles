@@ -47,5 +47,5 @@ Config {
     ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "  %UnsafeStdinReader% } <action=`gsimplecal mainwindow_yoffset=24` button=1>%date%</action> { %wlan0wi%    %default:Master%    %battery%    <action=`oblogout` button=1><fn=1><raw=1:/></fn></action>  "
+  , template = "  %UnsafeStdinReader% } <action=`gsimplecal mainwindow_yoffset=24` button=1>%date%</action> { %wlan0wi%    %default:Master%    %battery%    <action=`xdotool key super+shift+q` button=1><fn=1><raw=1:/></fn></action>  "
 }

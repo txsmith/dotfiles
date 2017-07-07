@@ -109,10 +109,11 @@ myLogHook xmproc = do
 
     makeClickable wId = case elemIndex wId myWorkspaces of
       Nothing -> wId
-      Just n -> "<action=xdotool key alt+" ++ show (n+1) ++ ">" ++ wId ++ "</action>"
+      Just n -> "<action=xdotool key super+" ++ show (n+1) ++ ">" ++ wId ++ "</action>"
 
 
 myStartupHook :: X ()
 myStartupHook = do
+  spawn "xmodmap ~/.Xmodmap"
   spawn "compton --backend glx --config ~/compton.conf"
   setWMName "LG3D"

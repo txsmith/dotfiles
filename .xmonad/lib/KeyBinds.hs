@@ -19,22 +19,20 @@ import XMonad.Actions.Navigation2D (Direction2D(D, U, L, R), windowGo, windowSwa
 import XMonad.Actions.Promote (promote)
 import qualified XMonad.Actions.ConstrainedResize as Sqr
 import XMonad.Actions.FloatSnap (ifClick, snapMagicMove, snapMagicResize)
-import XMonad.Actions.DynamicWorkspaces (withNthWorkspace, removeWorkspace, removeWorkspaceByTag)
+import XMonad.Actions.DynamicWorkspaces (withNthWorkspace, removeWorkspace)
 import XMonad.Actions.DynamicProjects (switchProjectPrompt, shiftToProjectPrompt, renameProjectPrompt)
 import XMonad.Actions.CycleWS (Direction1D(Next, Prev), WSType(..), toggleWS, findWorkspace, nextScreen, swapNextScreen)
 import XMonad.Layout.Hidden (hideWindow, popNewestHiddenWindow)
 import XMonad.Layout.SubLayouts (GroupMsg(MergeAll, UnMerge), toSubl, onGroup, pullGroup)
 import XMonad.Layout.MultiToggle (Toggle(Toggle))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(FULL))
-import XMonad.Hooks.ManageDocks (SetStruts(..))
-import qualified Data.Map as M 
+import XMonad.Layout.Gaps (GapMessage(IncGap, DecGap))
 
 import Styles
 import Actions
 import Layout
 import Data.List (find)
-import Data.Maybe (isNothing)
-import Control.Monad (when)
+import qualified Data.Map as M 
 
 -- Display keyboard mappings using zenity
 -- from https://github.com/thomasf/dotfiles-thomasf-xmonad/
@@ -79,6 +77,7 @@ myKeys conf = systemKeys ^++^ launcherKeys
       , ("M-S-<Space>", addName "DRUN Launcher" $ spawn myDrunLauncher)
       , ("M-<Return>", addName "Terminal" $ spawn myTerminal)
       , ("M-\\", addName "Browser" $ spawn myBrowser)
+      , ("M-<Print>", addName "Screenshot" $ spawn screenshotSelectCommand)
       ]
 
     windowKeys = subKeys "Windows" (
@@ -139,7 +138,7 @@ myKeys conf = systemKeys ^++^ launcherKeys
       , ("M-=", addName "Next non-empty workspace" nextNonEmptyWS)
       , ("M--", addName "Prev non-empty workspace" prevNonEmptyWS)
       , ("M-e", addName "Next visible workspace" $ nextScreen)
-      , ("M-S-e", addName "Next visible workspace" $ swapNextScreen)
+      , ("M-S-e", addName "Swap with next visible workspace" $ swapNextScreen)
       ]
         ++ zipM "M-" "View      ws" wsKeys [0..] (withNthWorkspace W.view)
         ++ zipM "M-S-" "Move w to ws" wsKeys [0..] (withNthWorkspace W.shift)
@@ -186,6 +185,18 @@ myMouseBindings (XConfig {XMonad.modMask = myModMask}) = M.fromList $
       >> ifClick (snapMagicResize [R,D] (Just 50) (Just 50) w)
       >> windows W.shiftMaster ))
 
+    -- Scroll up
+    , ((myModMask, button4), (\w -> do
+        trace "Decrease gaps"
+        sendMessage $ DecGap 48 L
+        sendMessage $ DecGap 48 R
+      ))
+    -- Scroll down
+    , ((myModMask, button5), (\w -> do
+        trace "Increase gaps"
+        sendMessage $ IncGap 48 L
+        sendMessage $ IncGap 48 R
+      ))
     ]
 
 

@@ -1,4 +1,5 @@
-preview-frontend:~/Development/preview/rite-evaluation
+preview-frontend:~/Development/preview/frontend
+preview-backend:~/Development/preview/backend
 dev:~/Development
 pic:~/Pictures
 dl:~/Downloads

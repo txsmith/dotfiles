@@ -50,4 +50,5 @@ myLauncher = "rofi -modi combi -show combi -combi-modi run,drun"
 myDrunLauncher = "rofi -modi drun -show drun"
 
 screenshotSelectCommand = "gnome-screenshot -i"
+
 screenshotWindowCommand = "gnome-screenshot -i -c"

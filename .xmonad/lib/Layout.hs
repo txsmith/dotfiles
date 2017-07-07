@@ -47,12 +47,12 @@ myLayoutHook = smartBorders
          $ addTopBar
          $ addTabs shrinkText myTabTheme
          $ subLayout [] (Accordion ||| Simplest)
-         $ IfMax 1 (singleWindowLayout ||| Simplest) ((standardLayouts $ 1%2) ||| (standardLayouts $ 2%3))
+         $ IfMax 1 (singleWindowLayout) ((standardLayouts $ 1%2) ||| (standardLayouts $ 2%3))
      
     singleWindowLayout = spacing gap 
                        $ gaps [(U,gap), (D,gap), (R,largeGap), (L,largeGap)]
                        $ Simplest
-      where largeGap = 480
+      where largeGap = 240
 
     standardLayouts r = spacing gap 
                     $ myGaps 
