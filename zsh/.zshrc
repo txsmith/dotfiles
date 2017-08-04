@@ -61,6 +61,11 @@ plugins=(git gitfast dirhistory mvn npm sudo web-search wd stack)
   export PATH="/home/thomas/npm-global/bin:$PATH"
   export PATH="$HOME/.cargo/bin:$PATH"
 
+# GPG agent config
+  GPG_TTY=$(tty)
+  SSH_AUTH_SOCK="$HOME/.gnupg/S.gpg-agent.ssh"
+  export GPG_TTY SSH_AUTH_SOCK
+
 source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment

@@ -1,2 +1,6 @@
 feh --bg-scale ~/dotfiles/wallpapers/os_x_yosemite.jpg
 # dropbox start
+
+# Use GPG for SSH auth
+killall gpg-agent
+gpg-connect-agent /bye 2> /dev/null
