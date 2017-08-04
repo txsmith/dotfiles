@@ -117,7 +117,6 @@ alias glo='git log'
 alias gr='git reset'
 alias grh='git reset --hard'
 alias grho='git reset --hard origin/$(git_current_branch)'
-
 # Other aliases
 alias xo='xdg-open'
 alias dist-upgrade='sudo apt-get update && sudo apt-get dist-upgrade'

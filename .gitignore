@@ -2,4 +2,10 @@
 \#*
 .xmonad/xmonad
 .xmonad/xmonad-contrib
-xmonad.state
+.xmonad/xmonad.state
+*.o
+*.hi
+*.errors
+xmonad-x86_64-linux
+.stack-work
+history

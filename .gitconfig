@@ -1,7 +1,12 @@
 [user]
 	name = Thomas Smith
 	email = t.n.smith@student.tudelft.nl
+	signingkey = CFD72669
 [push]
 	default = simple
 [core]
 	editor = nano
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg2

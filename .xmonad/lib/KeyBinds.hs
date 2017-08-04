@@ -137,6 +137,8 @@ myKeys conf = systemKeys ^++^ launcherKeys
       , ("M-l", addName "Toggle last workspace" toggleWS)
       , ("M-=", addName "Next non-empty workspace" nextNonEmptyWS)
       , ("M--", addName "Prev non-empty workspace" prevNonEmptyWS)
+      , ("M-k", addName "Next non-empty workspace" nextNonEmptyWS)
+      , ("M-j", addName "Prev non-empty workspace" prevNonEmptyWS)
       , ("M-e", addName "Next visible workspace" $ nextScreen)
       , ("M-S-e", addName "Swap with next visible workspace" $ swapNextScreen)
       ]
