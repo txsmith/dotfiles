@@ -12,7 +12,7 @@ wsChat = "Chat"
 wsSpotify = "Spotify"
 wsTerminals = "Terminal"
 
-myWorkspaces = [wsBrowser, wsChat, wsTerminals, wsJava, wsSpotify]
+myWorkspaces = [wsBrowser, wsTerminals, wsChat, wsJava, wsSpotify]
 
 projects :: [Project]
 projects =
