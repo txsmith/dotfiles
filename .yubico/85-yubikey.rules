@@ -1,0 +1,3 @@
+# Yubikey Udev Rule: running a bash script in case your Yubikey is inserted, removed or triggered by challenge-response
+ACTION=="remove|change", ENV{ID_VENDOR_ID}=="1050", ENV{ID_MODEL_ID}=="0407", ENV{ID_REVISION}=="0435", RUN+="/bin/su thomas -c '/home/thomas/.yubico/lock.sh'"
+ACTION=="add", ENV{ID_VENDOR_ID}=="1050", ENV{ID_MODEL_ID}=="0407", ENV{ID_REVISION}=="0435", RUN+="/bin/su thomas -c '/home/thomas/.yubico/poke.sh'"
