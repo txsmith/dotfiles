@@ -40,7 +40,7 @@ projects =
                 , projectDirectory  = "~/"
                 , projectStartHook  = Just $ do 
                     spawnOn wsChat myTelegram
-                    spawnOn wsChat mySlack
+                    -- spawnOn wsChat mySlack
                 }
 
     , Project   { projectName       = wsSpotify
