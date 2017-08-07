@@ -12,6 +12,7 @@ import XMonad.Util.NamedScratchpad (namedScratchpadFilterOutWorkspace)
 
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
 import XMonad.Prompt.XMonad (xmonadPromptC)
+import XMonad.Prompt.Pass
 
 import XMonad.Actions.CopyWindow (kill1)
 import XMonad.Actions.WithAll (killAll, sinkAll)
@@ -78,6 +79,7 @@ myKeys conf = systemKeys ^++^ launcherKeys
       , ("M-<Return>", addName "Terminal" $ spawn myTerminal)
       , ("M-\\", addName "Browser" $ spawn myBrowser)
       , ("M-<Print>", addName "Screenshot" $ spawn screenshotSelectCommand)
+      , ("M-o", addName "Password lookup dialog" $ passPrompt myPromptTheme)
       ]
 
     windowKeys = subKeys "Windows" (

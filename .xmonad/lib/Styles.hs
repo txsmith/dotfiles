@@ -76,6 +76,7 @@ myTabTheme = def
     , inactiveTextColor     = base00
     }
 
+myPromptTheme :: XPConfig
 myPromptTheme = def
     { font                  = myFont
     , bgColor               = base03
