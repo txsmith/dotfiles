@@ -56,10 +56,16 @@ plugins=(git gitfast dirhistory mvn npm sudo web-search wd stack)
 
 # User configuration
 
+# NPM global package directory
+  NPM_PACKAGES="${HOME}/.npm-packages"
+  # Unset manpath so we can inherit from /etc/manpath via the `manpath` command
+  unset MANPATH # delete if you already modified MANPATH elsewhere in your config
+  export MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+
   export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/thomas/.local/bin"
   export PATH="/home/thomas/.npm-global/bin:$PATH"
-  export PATH="/home/thomas/npm-global/bin:$PATH"
   export PATH="$HOME/.cargo/bin:$PATH"
+  export PATH="$NPM_PACKAGES/bin:$PATH"
 
 # GPG agent config
   GPG_TTY=$(tty)
