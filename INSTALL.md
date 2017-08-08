@@ -11,6 +11,7 @@ ln -s ~/dotfiles/compton.conf
 ln -s ~/dotfiles/.fonts
 ln -s ~/dotfiles/.ghci
 ln -s ~/dotfiles/.gitconfig
+ln -s ~/dotfiles/.gtkrc-2.0
 ln -s ~/dotfiles/.warprc
 ln -s ~/dotfiles/.Xmodmap
 ln -s ~/dotfiles/.xmonad
