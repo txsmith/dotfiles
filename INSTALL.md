@@ -7,6 +7,7 @@ sudo apt-get install curl wget pass pwgen compton zsh libindicator7 libappindica
 sudo apt-get purge pinentry-gnome3
 
 ln -s ~/dotfiles/compton.conf
+ln -s ~/dotfiles/.fonts
 ln -s ~/dotfiles/.ghci
 ln -s ~/dotfiles/.gitconfig
 ln -s ~/dotfiles/.warprc
@@ -28,6 +29,8 @@ git clone https://github.com/horst3180/arc-theme --depth 1 && cd arc-theme
 ./autogen.sh --prefix=/usr
 sudo make install
 
+# Rebuid font cache
+fc-cache -f -v
 
 # Install Haskell Stack
 curl -sSL https://get.haskellstack.org/ | sh
