@@ -14,5 +14,7 @@
   "editor.minimap.enabled": false,
   "haskell.ghcMod.logLevel": "log",
   "haskell.ghcMod.executablePath": "stack",
-  "latex-workshop.version": "2.10.0"
+  "latex-workshop.version": "2.10.0",
+ 
+  "git.autofetch": false
 }
