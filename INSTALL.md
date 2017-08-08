@@ -43,3 +43,7 @@ cabal install xmonad xmonad-contrib
 cabal install xmobar --flags="all_extensions"
 sudo cp ~/.cabal/bin/xmonad /usr/local/bin/xmonad
 sudo cp ~/.cabal/bin/xmobar /usr/local/bin/xmobar
+
+# Install VS Code config
+ln -s ~/dotfiles/vscode/keybindings.json ~/.config/Code/User/
+ln -s ~/dotfiles/vscode/settings.json ~/.config/Code/User/

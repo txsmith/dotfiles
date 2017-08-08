@@ -1,0 +1,18 @@
+// Place your settings in this file to overwrite the default settings
+{
+  "editor.tabSize": 2,
+  "window.zoomLevel": -1,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/build": true,
+    "**/coverage": true
+    
+  },
+  "workbench.iconTheme": "vs-seti",
+  "workbench.colorTheme": "Solarized Light",
+  "editor.minimap.enabled": false,
+  "haskell.ghcMod.logLevel": "log",
+  "haskell.ghcMod.executablePath": "stack",
+  "latex-workshop.version": "2.10.0"
+}
