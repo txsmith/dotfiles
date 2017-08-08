@@ -1,15 +1,16 @@
-# Install Spotify repo
+# Add the Spotify repo
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BBEBDCB318AD50EC6865090613B00F1FD2C19886 0DF731E45CE24F27EEEB1450EFDC8610341D9410
 echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
 
 # Install needed/useful packages
 sudo apt-get update
-sudo apt-get install curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xmonad
+sudo apt-get install curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xdotool xmonad pcscd scdaemon
 
-# Replace pinentry-gnome3 with pinentry-gtk2
+# Replace pinentry-gnome3 with pinentry-gtk2,
+# because the gnome version seems to be crazy slow when used in xmonad
 sudo apt-get purge pinentry-gnome3
 
-# Link all config files in your home dir
+# Link all config files so they are accessible from your home dir
 ln -s ~/dotfiles/compton.conf
 ln -s ~/dotfiles/.fonts
 ln -s ~/dotfiles/.ghci
@@ -55,3 +56,22 @@ xmonad --rebuild
 # Install VS Code config
 ln -s ~/dotfiles/vscode/keybindings.json ~/.config/Code/User/
 ln -s ~/dotfiles/vscode/settings.json ~/.config/Code/User/
+
+# Install keybase 
+curl -O https://prerelease.keybase.io/keybase_amd64.deb
+sudo dpkg -i keybase_amd64.deb
+sudo apt-get install -f
+run_keybase 
+
+# Don't forget to import your public key
+
+# Install Yubikey udev rules
+sudo ln -s ~/dotfiles/.yubico/85-yubikey.rules /etc/udev/rules.d/
+sudo service udev reload
+
+# Prime gpg-agent to support ssh
+echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
+
+# Also make sure the paths in 85-yubikey.rules are correct for you
+# And change authorized_yubikeys accordingly
+
