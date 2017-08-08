@@ -3,6 +3,7 @@
 .xmonad/xmonad
 .xmonad/xmonad-contrib
 .xmonad/xmonad.state
+.xmonad/prompt-history
 *.o
 *.hi
 *.errors
