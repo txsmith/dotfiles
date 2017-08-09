@@ -4,7 +4,9 @@ echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sourc
 
 # Install needed/useful packages
 sudo apt-get update
-sudo apt-get install curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xdotool xmonad pcscd scdaemon
+sudo apt-get install curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xdotool xmonad pcscd scdaemon libtool help2man libpam-dev yubikey-personalization yubikey-personalization-gui asciidoc libcurl4-gnutls-dev build-essential m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev nodejs
+
+# libpam-yubico
 
 # Replace pinentry-gnome3 with pinentry-gtk2,
 # because the gnome version seems to be crazy slow when used in xmonad
@@ -58,12 +60,41 @@ ln -s ~/dotfiles/vscode/keybindings.json ~/.config/Code/User/
 ln -s ~/dotfiles/vscode/settings.json ~/.config/Code/User/
 
 # Install keybase 
+cd ~/Downloads
 curl -O https://prerelease.keybase.io/keybase_amd64.deb
 sudo dpkg -i keybase_amd64.deb
 sudo apt-get install -f
 run_keybase 
+# Don't forget to import your public key into gpg2
 
-# Don't forget to import your public key
+# Install Yubico stuff from source to support challenge-response login
+# First install yubico-c
+git clone https://github.com/Yubico/yubico-c.git
+cd yubico-c
+autoreconf --install
+./configure
+sudo make check install
+
+# Install the `ykclient` cli tool
+cd ~/Downloads
+git clone https://github.com/Yubico/yubico-c-client.git
+cd yubico-c-client
+autoreconf --install
+./configure
+sudo make check install
+
+# Install the `yubico-pam` authentication module
+cd ~/Downloads
+git clone https://github.com/Yubico/yubico-pam.git
+cd yubico-pam
+autoreconf --install
+./configure
+sudo make check install
+
+# Activate the yubico-pam module
+sudo mv /usr/local/lib/security/pam_yubico.so /lib/security/
+# Add the moe to the auth stack by adding this line to /etc/pam.d/common-auth
+# auth sufficient pam_yubico.so id=[... your id ... ] key=[..  your api key ...] mode=client
 
 # Install Yubikey udev rules
 sudo ln -s ~/dotfiles/.yubico/85-yubikey.rules /etc/udev/rules.d/
