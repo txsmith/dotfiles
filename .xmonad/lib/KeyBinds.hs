@@ -1,14 +1,13 @@
 module KeyBinds where
 
 import XMonad
-import XMonad.Core
 import XMonad.Operations (windows, sendMessage)
 import qualified XMonad.StackSet as W
 
 import XMonad.Util.NamedActions
 import XMonad.Util.EZConfig (mkNamedKeymap)
 import XMonad.Util.WorkspaceCompare (getSortByIndex)
-import XMonad.Util.NamedScratchpad (namedScratchpadFilterOutWorkspace)
+import XMonad.Util.NamedScratchpad (namedScratchpadFilterOutWorkspace, namedScratchpadAction)
 
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
 import XMonad.Prompt.XMonad (xmonadPromptC)
@@ -17,21 +16,23 @@ import XMonad.Prompt.Pass
 import XMonad.Actions.CopyWindow (kill1)
 import XMonad.Actions.WithAll (killAll, sinkAll)
 import XMonad.Actions.Navigation2D (Direction2D(D, U, L, R), windowGo, windowSwap)
-import XMonad.Actions.Promote (promote)
 import qualified XMonad.Actions.ConstrainedResize as Sqr
 import XMonad.Actions.FloatSnap (ifClick, snapMagicMove, snapMagicResize)
 import XMonad.Actions.DynamicWorkspaces (withNthWorkspace, removeWorkspace)
-import XMonad.Actions.DynamicProjects (switchProjectPrompt, shiftToProjectPrompt, renameProjectPrompt)
+import XMonad.Actions.DynamicProjects (currentProject, activateProject, switchProjectPrompt, shiftToProjectPrompt, renameProjectPrompt)
 import XMonad.Actions.CycleWS (Direction1D(Next, Prev), WSType(..), toggleWS, findWorkspace, nextScreen, swapNextScreen)
 import XMonad.Layout.Hidden (hideWindow, popNewestHiddenWindow)
-import XMonad.Layout.SubLayouts (GroupMsg(MergeAll, UnMerge), toSubl, onGroup, pullGroup)
 import XMonad.Layout.MultiToggle (Toggle(Toggle))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(FULL))
-import XMonad.Layout.Gaps (GapMessage(IncGap, DecGap))
+import XMonad.Layout.BinarySpacePartition
+
+import XMonad.Hooks.ManageDocks (ToggleStruts(..))
+
 
 import Styles
 import Actions
 import Layout
+import Workspaces
 import Data.List (find)
 import qualified Data.Map as M 
 
@@ -80,59 +81,48 @@ myKeys conf = systemKeys ^++^ launcherKeys
       , ("M-\\", addName "Browser" $ spawn myBrowser)
       , ("M-<Print>", addName "Screenshot" $ spawn screenshotSelectCommand)
       , ("M-o", addName "Password lookup dialog" $ passPrompt myPromptTheme)
+
+      , ("M-<Esc>", addName "Scratchpad Terminal" $ namedScratchpadAction scratchpads "terminal")
+      , ("M-c", addName "Scratchpad Calculator" $ namedScratchpadAction scratchpads "calculator")
       ]
 
     windowKeys = subKeys "Windows" (
       [ ("M-<Backspace>", addName "Kill" kill1)
       , ("M-S-<Backspace>", addName "Kill all" $ confirmPrompt hotPromptTheme "kill all" killAll)
-
-      , ("M-h", addName "Hide window to stack" $ withFocused hideWindow)
-      , ("M-S-h", addName "Pop window from hidden stack" $ popNewestHiddenWindow)
-
-      , ("M-g", addName "Un-merge from sublayout" $ withFocused (sendMessage . UnMerge))
-      , ("M-S-g", addName "Merge all into sublayout" $ withFocused (sendMessage . MergeAll))
-
-      , ("M-m", addName "Promote to master" $ promote)
-
-      -- Tabs
-      , ("M-'", addName "Navigate previous tab" $ bindOn LD [("Tabs", windows W.focusDown), ("", onGroup W.focusDown')])
-      , ("M-;", addName "Navigate next tabs" $ bindOn LD [("Tabs", windows W.focusUp), ("", onGroup W.focusUp')])
-      , ("C-'", addName "Swap tab with previous" $ windows W.swapDown)
-      , ("C-;", addName "Swap tab with next" $ windows W.swapUp)
       
       -- Windows
-      , ("M-<Tab>", addName "Navigate next window" $ windows W.focusUp )
+      , ("M-<Tab>", addName "NRavigate next window" $ windows W.focusUp )
       , ("M-S-<Tcab>", addName "Swap next window" $ windows W.swapUp )
       ] 
-        -- Move / Navigate thourgh windows with M-<w,s,a,d>
-        ++ zipM' "M-" "Navigate window" dirKeys dirs windowGo True
-        ++ zipM' "M-S-" "Move window" dirKeys dirs windowSwap True
-        ++ zipM  "M-C-" "Merge w/sublayout" dirKeys dirs (sendMessage . pullGroup)
+      -- Move / Navigate thourgh windows with M-<w,s,a,d>
+      ++ zipM' "M-" "Navigate window" dirKeys dirs windowGo True
+      ++ zipM' "M-S-" "Move window" dirKeys dirs windowSwap True
 
-        -- Move / Navigate thourgh windows with M-<left, up, down, right>
-        ++ zipM' "M-" "Navigate window" arrowKeys dirs windowGo True
-        ++ zipM' "M-S-" "Move window" arrowKeys dirs windowSwap True
-        ++ zipM  "M-C-" "Merge w/sublayout" arrowKeys dirs (sendMessage . pullGroup)
+      -- Move / Navigate thourgh windows with M-<left, up, down, right>
+      ++ zipM' "M-" "Navigate window" arrowKeys dirs windowGo True
+      ++ zipM' "M-S-" "Move window" arrowKeys dirs windowSwap True
       )
 
     layoutKeys = subKeys "Layout Management"
       [ ("M-y", addName "Float tiled w" $ withFocused toggleFloat)
       , ("M-S-y", addName "Tile all floating w" sinkAll)
+
+      , ("M-h", addName "Hide window to stack" $ withFocused hideWindow)
+      , ("M-S-h", addName "Pop window from hidden stack" $ popNewestHiddenWindow)
       
       , ("M-f", addName "Fullscreen" $ sequence_ [ (withFocused $ windows . W.sink)
                                                  , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULL) ])
       , ("M-S-f", addName "Fullscreen" $ sequence_ [ (withFocused $ windows . W.sink)
                                                  , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULLBAR) ])
-
-      , ("M-`", addName "Cycle layouts " $ sendMessage NextLayout)
-      , ("M-S-`", addName "Cycle sublayouts " $ toSubl NextLayout)
       
-      , ("M-,", addName "Decrease master windows" $ sendMessage (IncMasterN (-1)))
-      , ("M-.", addName "Increase master windows" $ sendMessage (IncMasterN 1))
+      , ("M-r", addName "Rotate BSP Layout" $ sendMessage Rotate)
+      , ("M-b", addName "Swap BSP Layout" $ sendMessage Swap)
+      , ("M-t", addName "Toggle struts" $ sendMessage ToggleStruts)
       ]
 
     workspaceKeys = subKeys "Workspaces & Projects" (
-      [ ("M-p", addName "Switch to Project" $ switchProjectPrompt myPromptTheme)
+      [ ("M-S-<Return>", addName "Activate current Project" $ currentProject >>= activateProject) 
+      , ("M-p", addName "Switch to Project" $ switchProjectPrompt myPromptTheme)
       , ("M-S-p", addName "Shift to Project" $ shiftToProjectPrompt myPromptTheme)
       , ("M-C-p", addName "Rename Project" $ renameProjectPrompt myPromptTheme)
       , ("M-C-<Backspace>", addName "Remove Project" $ confirmPrompt hotPromptTheme "Remove Workspace?" $ removeWorkspace)
@@ -144,8 +134,8 @@ myKeys conf = systemKeys ^++^ launcherKeys
       , ("M-e", addName "Next visible workspace" $ nextScreen)
       , ("M-S-e", addName "Swap with next visible workspace" $ swapNextScreen)
       ]
-        ++ zipM "M-" "View      ws" wsKeys [0..] (withNthWorkspace W.view)
-        ++ zipM "M-S-" "Move w to ws" wsKeys [0..] (withNthWorkspace W.shift)
+      ++ zipM "M-" "View ws" wsKeys [0..] (withNthWorkspace W.view)
+      ++ zipM "M-S-" "Move w to ws" wsKeys [0..] (withNthWorkspace W.shift)
       )
     
     wsKeys = show <$> [1..9] ++ [0]
@@ -190,17 +180,18 @@ myMouseBindings (XConfig {XMonad.modMask = myModMask}) = M.fromList $
       >> windows W.shiftMaster ))
 
     -- Scroll up
-    , ((myModMask, button4), (\w -> do
-        trace "Decrease gaps"
-        sendMessage $ DecGap 48 L
-        sendMessage $ DecGap 48 R
-      ))
+    , ((myModMask, button4), (\_ -> sendMessage $ ExpandTowards U))
+    , ((myModMask .|. shiftMask, button4), (\_ -> sendMessage $ ShrinkFrom D))
     -- Scroll down
-    , ((myModMask, button5), (\w -> do
-        trace "Increase gaps"
-        sendMessage $ IncGap 48 L
-        sendMessage $ IncGap 48 R
-      ))
+    , ((myModMask, button5), (\_ -> do sendMessage $ ExpandTowards D))
+    , ((myModMask .|. shiftMask, button5), (\_ -> do sendMessage $ ShrinkFrom U))
+    
+    -- Scroll Left
+    , ((myModMask, 7), (\_ -> sendMessage $ ExpandTowards L))
+    , ((myModMask .|. shiftMask, 7), (\_ -> sendMessage $ ShrinkFrom R))
+    -- Scroll down
+    , ((myModMask, 6), (\_ -> do sendMessage $ ExpandTowards R))
+    , ((myModMask .|. shiftMask, 6), (\_ -> do sendMessage $ ShrinkFrom L))
     ]
 
 

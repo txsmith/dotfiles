@@ -38,6 +38,8 @@ myTerminal = "gnome-terminal"
 
 myBrowser = "google-chrome-stable"
 
+myCalculator = "gnome-calculator"
+
 myMusic = "spotify"
 
 myTelegram = "tg"

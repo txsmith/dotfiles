@@ -4,8 +4,6 @@ module Layout where
 import XMonad
 
 import XMonad.Layout.NoBorders (smartBorders)
-import XMonad.Layout.Hidden (hiddenWindows)
-import XMonad.Layout.BoringWindows (boringWindows)
 import XMonad.Layout.WindowNavigation (Direction2D(U, D, L, R), windowNavigation)
 import XMonad.Layout.Spacing (spacing)
 import XMonad.Layout.Gaps (gaps)
@@ -15,11 +13,9 @@ import XMonad.Layout.Simplest
 import XMonad.Layout.Tabbed (addTabs)
 import XMonad.Layout.TabBarDecoration (shrinkText)
 import XMonad.Layout.NoFrillsDecoration (noFrillsDeco)
-import XMonad.Layout.SubLayouts (subLayout)
-import XMonad.Layout.Accordion (Accordion(..))
-import XMonad.Layout.ResizableTile (ResizableTall(..))
-import XMonad.Layout.LayoutModifier
+import XMonad.Layout.BinarySpacePartition (emptyBSP)
 import XMonad.Layout.IfMax
+import XMonad.Layout.BorderResize
 
 import XMonad.Actions.Navigation2D (
     Navigation2DConfig(..)
@@ -27,36 +23,33 @@ import XMonad.Actions.Navigation2D (
     , lineNavigation
     , singleWindowRect)
 import XMonad.Hooks.ManageDocks (avoidStruts)
-import Data.Ratio ((%))
 
 import Styles
 
+-- Transformer to make the current window fullscreen while keeping the top bar.
+-- As opposed to FULL, which hides the top bar
 data FULLBAR = FULLBAR deriving (Read, Show, Eq, Typeable)
 instance Transformer FULLBAR Window where
   transform FULLBAR x k = k (avoidStruts Simplest) (const x)
 
-myLayoutHook = smartBorders 
+myLayoutHook = borderResize 
+             $ smartBorders 
              $ fullScreenToggle
              $ fullBarToggle
-             $ hiddenWindows
-             $ boringWindows
-             $ avoidStruts flex
+             $ avoidStruts
+             $ windowNavigation
+             $ addTopBar
+             $ addTabs shrinkText myTabTheme
+             $ IfMax 1 singleWindowLayout bspLayout
   where
+    bspLayout = spacing gap
+              $ myGaps
+              $ emptyBSP
 
-    flex = windowNavigation
-         $ addTopBar
-         $ addTabs shrinkText myTabTheme
-         $ subLayout [] (Accordion ||| Simplest)
-         $ IfMax 1 (singleWindowLayout) ((standardLayouts $ 1%2) ||| (standardLayouts $ 2%3))
-     
     singleWindowLayout = spacing gap 
                        $ gaps [(U,gap), (D,gap), (R,largeGap), (L,largeGap)]
                        $ Simplest
       where largeGap = 240
-
-    standardLayouts r = spacing gap 
-                    $ myGaps 
-                    $ (ResizableTall 1 (1/20) r [])
     
     fullBarToggle = mkToggle (single FULLBAR)
     
@@ -64,7 +57,7 @@ myLayoutHook = smartBorders
     
     addTopBar = noFrillsDeco shrinkText topBarTheme
 
-    myGaps =  gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
+    myGaps = gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
 
 myNav2DConf :: Navigation2DConfig 
 myNav2DConf = def

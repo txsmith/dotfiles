@@ -4,16 +4,22 @@
 module Main where
 
 import XMonad
+import qualified XMonad.StackSet as W
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.Place (placeHook, fixed)
+
+import XMonad.Layout.Fullscreen
 
 import XMonad.Actions.SpawnOn (manageSpawn)
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.NamedActions (addDescrKeys')
 import XMonad.Util.WorkspaceCompare
+import XMonad.Util.NamedScratchpad (namedScratchpadManageHook, namedScratchpadFilterOutWorkspacePP)
+
 
 import XMonad.Actions.Navigation2D (withNavigation2DConfig)
 import XMonad.Actions.DynamicProjects (dynamicProjects)
@@ -37,6 +43,7 @@ main = do
     xmproc <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
 
     xmonad $ 
+      fullscreenSupport $ 
       dynamicProjects projects $
       withNavigation2DConfig myNav2DConf $ 
       ewmh $
@@ -71,16 +78,30 @@ isSpotify = do
   trace $ "CLASS IS:" ++ c
   return $ ("spotify" `isPrefixOf`) $ (toLower <$> c)
 
-isLauncher = stringProperty "WM_NAME" =? "Terminal"
 
 myManageHook :: ManageHook
 myManageHook = do
   manageDocks
   manageSpawn
-  composeAll [ 
-    (isLauncher <||> isSpotify) --> ((placeHook $ fixed (1, 0))) -- 
+  namedScratchpadManageHook scratchpads
+  composeOne [ 
+      isScratchpadTerminal -?> doCenterFloat
+    , isCalculator -?> doCenterFloat
     ] 
   -- manageHook def
+
+forceCenterFloat :: ManageHook
+forceCenterFloat = doFloatDep move
+  where
+    move :: W.RationalRect -> W.RationalRect
+    move _ = W.RationalRect x y w h
+
+    w, h, x, y :: Rational
+    w = 1/3
+    h = 1/2
+    x = (1-w)/2
+    y = (1-h)/2
+
 
 myHandleEventHook :: Event -> X All
 myHandleEventHook = do 
@@ -91,17 +112,17 @@ myHandleEventHook = do
 myLogHook :: Handle -> X ()
 myLogHook xmproc = do
   ewmhDesktopsLogHook
-  dynamicLogWithPP xmobarPP {
-        ppOutput  = hPutStrLn xmproc
+  dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP xmobarPP {
+        ppOutput = hPutStrLn xmproc
       , ppCurrent =  xmobarColor xmobarCurrentWorkspaceColor ""
       , ppVisible = makeClickable
       , ppHidden = xmobarColor xmobarHiddenWorkspaceColor "" . makeClickable
       , ppHiddenNoWindows = xmobarColor xmobarHiddenWorkspaceColor "" . makeClickable
-      , ppTitle   = hide
+      , ppTitle = hide
       , ppSort = getSortByIndex
-      , ppSep     = "   "
-      , ppWsSep   = "  "
-      , ppLayout  = hide
+      , ppSep = "   "
+      , ppWsSep = "  "
+      , ppLayout = hide
   }
 
   where 
@@ -117,3 +138,4 @@ myStartupHook = do
   spawn "xmodmap ~/.Xmodmap"
   spawn "compton --backend glx --config ~/compton.conf"
   setWMName "LG3D"
+  docksStartupHook

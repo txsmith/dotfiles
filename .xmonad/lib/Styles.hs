@@ -25,7 +25,7 @@ green   = "#859900"
 white   = "#ffffff"
 
 gap :: Int
-gap    = 15
+gap = 15
 
 topbar = 4
 border = 0

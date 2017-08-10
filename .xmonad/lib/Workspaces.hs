@@ -1,8 +1,10 @@
 module Workspaces where
 
+import XMonad.StackSet as W
 import XMonad.Actions.SpawnOn
 import XMonad.Actions.DynamicProjects
-
+import XMonad.Util.NamedScratchpad
+import XMonad.ManageHook (stringProperty, className, (=?), (<&&>))
 import Control.Monad
 import Actions
 
@@ -13,6 +15,16 @@ wsSpotify = "Spotify"
 wsTerminals = "Terminal"
 
 myWorkspaces = [wsBrowser, wsTerminals, wsChat, wsJava, wsSpotify]
+
+isScratchpadTerminal = (className =? "Gnome-terminal")
+    <&&> (stringProperty "WM_WINDOW_ROLE" =? "Scratchpad")
+    
+isCalculator = (className =? "Gnome-calculator")
+
+scratchpads = [
+      NS "terminal" (myTerminal ++ " --role=Scratchpad") isScratchpadTerminal defaultFloating
+    , NS "calculator" myCalculator isCalculator defaultFloating
+    ] 
 
 projects :: [Project]
 projects =
@@ -33,7 +45,7 @@ projects =
     
     , Project   { projectName       = wsTerminals
                 , projectDirectory  = "~/"
-                , projectStartHook  = Just $ replicateM_ 3 (spawnOn wsTerminals myTerminal)
+                , projectStartHook  = Just $ spawnOn wsTerminals myTerminal
                 }
 
     , Project   { projectName       = wsChat
