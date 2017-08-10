@@ -72,6 +72,8 @@ plugins=(git gitfast dirhistory mvn npm sudo web-search wd stack)
   SSH_AUTH_SOCK="$HOME/.gnupg/S.gpg-agent.ssh"
   export GPG_TTY SSH_AUTH_SOCK
 
+  export PASSWORD_STORE_CLIP_TIME=10
+
 source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
