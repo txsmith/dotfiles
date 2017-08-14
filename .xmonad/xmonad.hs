@@ -23,6 +23,7 @@ import XMonad.Util.NamedScratchpad (namedScratchpadManageHook, namedScratchpadFi
 
 import XMonad.Actions.Navigation2D (withNavigation2DConfig)
 import XMonad.Actions.DynamicProjects (dynamicProjects)
+import XMonad.Actions.DynamicWorkspaceOrder (getSortByOrder)
 
 import System.IO
 import Data.Monoid
@@ -119,7 +120,7 @@ myLogHook xmproc = do
       , ppHidden = xmobarColor xmobarHiddenWorkspaceColor "" . makeClickable
       , ppHiddenNoWindows = xmobarColor xmobarHiddenWorkspaceColor "" . makeClickable
       , ppTitle = hide
-      , ppSort = getSortByIndex
+      , ppSort = getSortByOrder
       , ppSep = "   "
       , ppWsSep = "  "
       , ppLayout = hide

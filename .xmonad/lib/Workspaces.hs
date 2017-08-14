@@ -1,20 +1,25 @@
 module Workspaces where
 
-import XMonad.StackSet as W
+import XMonad.Core
 import XMonad.Actions.SpawnOn
 import XMonad.Actions.DynamicProjects
 import XMonad.Util.NamedScratchpad
 import XMonad.ManageHook (stringProperty, className, (=?), (<&&>))
-import Control.Monad
 import Actions
+
+import Control.Monad (void)
+import Data.Traversable (traverse)
 
 wsBrowser = "Internet"
 wsJava = "Java"
 wsChat = "Chat"
 wsSpotify = "Spotify"
 wsTerminals = "Terminal"
+wsHueHaskell = "Hue Haskell"
+wsXMonad = "XMonad"
+wsHaskellBook = "Haskell Book"
 
-myWorkspaces = [wsBrowser, wsTerminals, wsChat, wsJava, wsSpotify]
+myWorkspaces = [wsBrowser, wsHueHaskell, wsHaskellBook, wsXMonad, wsTerminals, wsChat, wsJava, wsSpotify]
 
 isScratchpadTerminal = (className =? "Gnome-terminal")
     <&&> (stringProperty "WM_WINDOW_ROLE" =? "Scratchpad")
@@ -28,36 +33,20 @@ scratchpads = [
 
 projects :: [Project]
 projects =
-
-    [ 
-      Project   { projectName       = wsBrowser
-                , projectDirectory  = "~/"
-                , projectStartHook  = Just $ do
-                    spawnOn wsJava myBrowser
-                }
-
-    , Project   { projectName       = wsJava
-                , projectDirectory  = "~/"
-                , projectStartHook  = Just $ do
-                    spawnOn wsJava myIntelliJ
-                    spawnOn wsJava myTerminal
-                }
-    
-    , Project   { projectName       = wsTerminals
-                , projectDirectory  = "~/"
-                , projectStartHook  = Just $ spawnOn wsTerminals myTerminal
-                }
-
-    , Project   { projectName       = wsChat
-                , projectDirectory  = "~/"
-                , projectStartHook  = Just $ do 
-                    spawnOn wsChat myTelegram
-                    -- spawnOn wsChat mySlack
-                }
-
-    , Project   { projectName       = wsSpotify
-                , projectDirectory  = "~/"
-                , projectStartHook  = Just $ spawnOn wsSpotify myMusic
-                }
-
+    [ project wsJava "~/" [myTerminal, myIntelliJ]
+    , project wsBrowser "~/" [myBrowser]
+    , project wsTerminals "~/" [myTerminal]
+    , project wsChat "~/" [myTelegram]
+    , project wsSpotify "~/" [myMusic]
+    , project wsHueHaskell "~/dev/haskell/hue" [myTerminal, "code ."]
+    , project wsHaskellBook "~/dev/haskell/hue" [myTerminal, "code ."]
+    , project wsHaskellBook "~/dev/haskell/hue" [myTerminal, "code .", "xo ~/Dropbox/Ebooks/haskell-programming-0.12.0-screen.pdf"]
+    , project wsXMonad "~/.xmonad" [myTerminal, "code ."]
     ]
+
+project :: ProjectName -> FilePath -> [String] -> Project
+project ws dir spawnList =  Project {
+    projectName       = ws
+  , projectDirectory  = dir
+  , projectStartHook  = Just $ void $ traverse (spawnOn ws) spawnList
+}

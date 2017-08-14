@@ -6,7 +6,6 @@ import qualified XMonad.StackSet as W
 
 import XMonad.Util.NamedActions
 import XMonad.Util.EZConfig (mkNamedKeymap)
-import XMonad.Util.WorkspaceCompare (getSortByIndex)
 import XMonad.Util.NamedScratchpad (namedScratchpadFilterOutWorkspace, namedScratchpadAction)
 
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
@@ -18,9 +17,11 @@ import XMonad.Actions.WithAll (killAll, sinkAll)
 import XMonad.Actions.Navigation2D (Direction2D(D, U, L, R), windowGo, windowSwap)
 import qualified XMonad.Actions.ConstrainedResize as Sqr
 import XMonad.Actions.FloatSnap (ifClick, snapMagicMove, snapMagicResize)
-import XMonad.Actions.DynamicWorkspaces (withNthWorkspace, removeWorkspace)
+import XMonad.Actions.DynamicWorkspaces (removeWorkspace)
 import XMonad.Actions.DynamicProjects (currentProject, activateProject, switchProjectPrompt, shiftToProjectPrompt, renameProjectPrompt)
 import XMonad.Actions.CycleWS (Direction1D(Next, Prev), WSType(..), toggleWS, findWorkspace, nextScreen, swapNextScreen)
+import XMonad.Actions.DynamicWorkspaceOrder (swapWith, getSortByOrder, withNthWorkspace)
+
 import XMonad.Layout.Hidden (hideWindow, popNewestHiddenWindow)
 import XMonad.Layout.MultiToggle (Toggle(Toggle))
 import XMonad.Layout.MultiToggle.Instances (StdTransformers(FULL))
@@ -129,8 +130,8 @@ myKeys conf = systemKeys ^++^ launcherKeys
       , ("M-l", addName "Toggle last workspace" toggleWS)
       , ("M-=", addName "Next non-empty workspace" nextNonEmptyWS)
       , ("M--", addName "Prev non-empty workspace" prevNonEmptyWS)
-      , ("M-k", addName "Next non-empty workspace" nextNonEmptyWS)
-      , ("M-j", addName "Prev non-empty workspace" prevNonEmptyWS)
+      , ("M-S-=", addName "Swap next non-empty workspace" $ swapWith Next NonEmptyWS)
+      , ("M-S--", addName "Swap prev non-empty workspace" $ swapWith Prev NonEmptyWS)
       , ("M-e", addName "Next visible workspace" $ nextScreen)
       , ("M-S-e", addName "Swap with next visible workspace" $ swapNextScreen)
       ]
@@ -149,7 +150,7 @@ myKeys conf = systemKeys ^++^ launcherKeys
       windows $ W.view t
 
     getSortByIndexNoSP =
-            fmap (. namedScratchpadFilterOutWorkspace) getSortByIndex
+            fmap (. namedScratchpadFilterOutWorkspace) getSortByOrder
             
 
 
