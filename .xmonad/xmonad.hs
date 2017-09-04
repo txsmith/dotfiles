@@ -4,20 +4,17 @@
 module Main where
 
 import XMonad
-import qualified XMonad.StackSet as W
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.Place (placeHook, fixed)
 
 import XMonad.Layout.Fullscreen
 
 import XMonad.Actions.SpawnOn (manageSpawn)
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.NamedActions (addDescrKeys')
-import XMonad.Util.WorkspaceCompare
 import XMonad.Util.NamedScratchpad (namedScratchpadManageHook, namedScratchpadFilterOutWorkspacePP)
 
 
@@ -89,25 +86,11 @@ myManageHook = do
       isScratchpadTerminal -?> doCenterFloat
     , isCalculator -?> doCenterFloat
     ] 
-  -- manageHook def
-
-forceCenterFloat :: ManageHook
-forceCenterFloat = doFloatDep move
-  where
-    move :: W.RationalRect -> W.RationalRect
-    move _ = W.RationalRect x y w h
-
-    w, h, x, y :: Rational
-    w = 1/3
-    h = 1/2
-    x = (1-w)/2
-    y = (1-h)/2
 
 
 myHandleEventHook :: Event -> X All
 myHandleEventHook = do 
   docksEventHook
-  -- handleEventHook def
 
 
 myLogHook :: Handle -> X ()

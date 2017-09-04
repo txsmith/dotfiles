@@ -52,7 +52,6 @@ myKeys conf = systemKeys ^++^ launcherKeys
   where
 
     subKeys str ks = subtitle str : mkNamedKeymap conf ks
-    -- screenKeys     = ["w","v","z"]
     arrowKeys      = ["<U>","<D>","<L>","<R>"]
     dirKeys        = ["w", "s", "a", "d"]
     dirs           = [ U, D, L, R ]
@@ -128,10 +127,10 @@ myKeys conf = systemKeys ^++^ launcherKeys
       , ("M-C-p", addName "Rename Project" $ renameProjectPrompt myPromptTheme)
       , ("M-C-<Backspace>", addName "Remove Project" $ confirmPrompt hotPromptTheme "Remove Workspace?" $ removeWorkspace)
       , ("M-l", addName "Toggle last workspace" toggleWS)
-      , ("M-=", addName "Next non-empty workspace" nextNonEmptyWS)
-      , ("M--", addName "Prev non-empty workspace" prevNonEmptyWS)
-      , ("M-S-=", addName "Swap next non-empty workspace" $ swapWith Next NonEmptyWS)
-      , ("M-S--", addName "Swap prev non-empty workspace" $ swapWith Prev NonEmptyWS)
+      , ("M-=", addName "Next workspace" nextNonEmptyWS)
+      , ("M--", addName "Prev workspace" prevNonEmptyWS)
+      , ("M-S-=", addName "Swap next workspace" $ swapWith Next HiddenWS)
+      , ("M-S--", addName "Swap prev workspace" $ swapWith Prev HiddenWS)
       , ("M-e", addName "Next visible workspace" $ nextScreen)
       , ("M-S-e", addName "Swap with next visible workspace" $ swapNextScreen)
       ]
