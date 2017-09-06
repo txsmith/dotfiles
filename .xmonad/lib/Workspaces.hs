@@ -10,7 +10,7 @@ import Control.Monad (void)
 import Data.Traversable (traverse)
 
 wsBrowser = "Internet"
-wsJava = "Java"
+-- wsJava = "Java"
 wsChat = "Chat"
 wsSpotify = "Spotify"
 wsTerminals = "Terminal"
@@ -19,7 +19,16 @@ wsXMonad = "XMonad"
 wsHaskellBook = "Haskell Book"
 wsStudy = "Study"
 
-myWorkspaces = [wsBrowser, wsHueHaskell, wsHaskellBook, wsXMonad, wsChat, wsJava, wsSpotify,  wsStudy]
+myWorkspaces = [
+    wsBrowser
+  , wsHueHaskell
+  , wsHaskellBook
+  , wsXMonad
+  , wsChat
+  -- , wsTerminals
+  -- , wsJava
+  , wsSpotify
+  , wsStudy]
 
 isScratchpadTerminal = (className =? "Gnome-terminal")
   <&&> (stringProperty "WM_WINDOW_ROLE" =? "Scratchpad")
@@ -32,9 +41,9 @@ scratchpads = [
   ] 
 
 projects :: [Project]
-projects =
-  [ project wsJava "~/" [myTerminal, myIntelliJ]
-  , project wsBrowser "~/" [myBrowser]
+projects = [
+    -- project wsJava "~/" [myTerminal, myIntelliJ]
+    project wsBrowser "~/" [myBrowser]
   -- , project wsTerminals "~/" [myTerminal]
   , project wsChat "~/" [myTelegram]
   , project wsSpotify "~/" [myMusic]
