@@ -4,6 +4,7 @@
 module Main where
 
 import XMonad
+import qualified XMonad.StackSet as StackSet
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -20,11 +21,11 @@ import XMonad.Util.NamedScratchpad (namedScratchpadManageHook, namedScratchpadFi
 
 import XMonad.Actions.Navigation2D (withNavigation2DConfig)
 import XMonad.Actions.DynamicProjects (dynamicProjects)
-import XMonad.Actions.DynamicWorkspaceOrder (getSortByOrder)
+import XMonad.Actions.DynamicWorkspaceOrder (getSortByOrder, getWsCompareByOrder)
 
 import System.IO
 import Data.Monoid
-import Data.List (elemIndex, isPrefixOf)
+import Data.List (elemIndex, isPrefixOf, sortBy)
 import Data.Char (toLower)
 
 import KeyBinds
@@ -96,26 +97,33 @@ myHandleEventHook = do
 myLogHook :: Handle -> X ()
 myLogHook xmproc = do
   ewmhDesktopsLogHook
+
+  dynWorkspaces <- gets $ map StackSet.tag . StackSet.workspaces . windowset
+  sortedWs <- (`sortBy` dynWorkspaces) <$> getWsCompareByOrder
+
   dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP xmobarPP {
         ppOutput = hPutStrLn xmproc
-      , ppCurrent =  xmobarColor xmobarCurrentWorkspaceColor ""
-      , ppVisible = makeClickable
-      , ppHidden = xmobarColor xmobarHiddenWorkspaceColor "" . makeClickable
-      , ppHiddenNoWindows = xmobarColor xmobarHiddenWorkspaceColor "" . makeClickable
+      , ppCurrent =  xmobarColor xmobarCurrentWorkspaceColor "" . addWSNumber sortedWs
+      , ppVisible = makeClickable sortedWs
+      , ppHidden = xmobarColor xmobarHiddenWorkspaceColor "" . makeClickable sortedWs
+      , ppHiddenNoWindows = xmobarColor xmobarHiddenWorkspaceColor "" . makeClickable sortedWs
       , ppTitle = hide
       , ppSort = getSortByOrder
       , ppSep = "   "
-      , ppWsSep = "  "
+      , ppWsSep = "   "
       , ppLayout = hide
   }
 
   where 
     hide = const ""
 
-    makeClickable wId = case elemIndex wId myWorkspaces of
+    makeClickable sortedWs wId = case elemIndex wId sortedWs of
       Nothing -> wId
-      Just n -> "<action=xdotool key super+" ++ show (n+1) ++ ">" ++ wId ++ "</action>"
+      Just n -> "<action=xdotool key super+" ++ show (n+1) ++ ">" ++ addWSNumber sortedWs wId ++ "</action>"
 
+    addWSNumber sortedWs wId = case elemIndex wId sortedWs of
+      Nothing -> wId
+      Just n -> "<fn=2>" ++ show (n+1) ++ "</fn> " ++  wId
 
 myStartupHook :: X ()
 myStartupHook = do

@@ -1,7 +1,7 @@
 
 Config { 
     font = "xft:SFNS Display:size=11:antialias=true"
-  , additionalFonts = ["xft:FontAwesome:size=11:antialias=true"]
+  , additionalFonts = ["xft:FontAwesome:size=11:antialias=true", "xft:SFNS Display:size=7:antialias=true"]
   , border = NoBorder
   , allDesktops = True
   , overrideRedirect = True

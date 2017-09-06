@@ -1,6 +1,5 @@
 module Workspaces where
 
-import XMonad.Core
 import XMonad.Actions.SpawnOn
 import XMonad.Actions.DynamicProjects
 import XMonad.Util.NamedScratchpad
@@ -18,8 +17,9 @@ wsTerminals = "Terminal"
 wsHueHaskell = "Hue Haskell"
 wsXMonad = "XMonad"
 wsHaskellBook = "Haskell Book"
+wsStudy = "Study"
 
-myWorkspaces = [wsBrowser, wsHueHaskell, wsHaskellBook, wsXMonad, wsTerminals, wsChat, wsJava, wsSpotify]
+myWorkspaces = [wsBrowser, wsHueHaskell, wsHaskellBook, wsXMonad, wsChat, wsJava, wsSpotify,  wsStudy]
 
 isScratchpadTerminal = (className =? "Gnome-terminal")
   <&&> (stringProperty "WM_WINDOW_ROLE" =? "Scratchpad")
@@ -35,13 +35,14 @@ projects :: [Project]
 projects =
   [ project wsJava "~/" [myTerminal, myIntelliJ]
   , project wsBrowser "~/" [myBrowser]
-  , project wsTerminals "~/" [myTerminal]
+  -- , project wsTerminals "~/" [myTerminal]
   , project wsChat "~/" [myTelegram]
   , project wsSpotify "~/" [myMusic]
   , project wsHueHaskell "~/dev/haskell/hue" [myTerminal, "code ."]
   , project wsHaskellBook "~/dev/haskell/hue" [myTerminal, "code ."]
   , project wsHaskellBook "~/dev/haskell/learning/playground" ["xdg-open ~/Dropbox/Ebooks/haskell-programming-0.12.0-screen.pdf", myTerminal, "code ."]
   , project wsXMonad "~/.xmonad" [myTerminal, "code ."]
+  , project wsStudy "~/dev/tu" [myTerminal, "code .", myBrowser ++ " --new-window \"https://brightspace.tudelft.nl\""]
   ]
 
 project :: ProjectName -> FilePath -> [String] -> Project
