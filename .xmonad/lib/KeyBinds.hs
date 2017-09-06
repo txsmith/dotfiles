@@ -134,8 +134,8 @@ myKeys conf = systemKeys ^++^ launcherKeys
       , ("M-e", addName "Next visible workspace" $ nextScreen)
       , ("M-S-e", addName "Swap with next visible workspace" $ swapNextScreen)
       ]
-      ++ zipM "M-" "View ws" wsKeys [0..] (withNthWorkspace W.view)
-      ++ zipM "M-S-" "Move w to ws" wsKeys [0..] (withNthWorkspace W.shift)
+      ++ zipM "M-" "View ws" wsKeys [0..] (withNthWorkspace $ ifNotScratchpad W.view)
+      ++ zipM "M-S-" "Move w to ws" wsKeys [0..] (withNthWorkspace $ ifNotScratchpad W.shift)
       )
     
     wsKeys = show <$> [1..9] ++ [0]
@@ -150,8 +150,11 @@ myKeys conf = systemKeys ^++^ launcherKeys
 
     getSortByIndexNoSP =
             fmap (. namedScratchpadFilterOutWorkspace) getSortByOrder
-            
 
+    ifNotScratchpad action wId =
+      if (wId /= "NSP")
+        then action wId
+        else id
 
 -- Mouse bindings: default actions bound to mouse events
 -- Includes window snapping on move/resize using X.A.FloatSnap
