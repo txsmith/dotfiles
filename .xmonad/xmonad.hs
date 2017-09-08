@@ -98,7 +98,7 @@ myLogHook :: Handle -> X ()
 myLogHook xmproc = do
   ewmhDesktopsLogHook
 
-  dynWorkspaces <- gets $ map StackSet.tag . StackSet.workspaces . windowset
+  dynWorkspaces <- gets $ filter (/= "NSP") . map StackSet.tag . StackSet.workspaces . windowset
   sortedWs <- (`sortBy` dynWorkspaces) <$> getWsCompareByOrder
 
   dynamicLogWithPP $ namedScratchpadFilterOutWorkspacePP xmobarPP {
@@ -110,7 +110,7 @@ myLogHook xmproc = do
       , ppTitle = hide
       , ppSort = getSortByOrder
       , ppSep = "   "
-      , ppWsSep = "   "
+      , ppWsSep = "  "
       , ppLayout = hide
   }
 
