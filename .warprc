@@ -1,10 +1,9 @@
-preview-frontend:~/Development/preview/frontend
-preview-backend:~/Development/preview/backend
-dev:~/Development
+preview-frontend:~/dev/preview/frontend
+preview-backend:~/dev/preview/backend
+dev:~/dev
 pic:~/Pictures
 dl:~/Downloads
 mnt:/media/thomas
-lexi:~/Development/Haskell/lexi
-tu:~/Development/TU
-hs:~/Development/Haskell
+tu:~/dev/tu
+hs:~/dev/Haskell
 dot:~/dotfiles
