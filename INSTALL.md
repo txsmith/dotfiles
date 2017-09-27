@@ -4,7 +4,7 @@ echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sourc
 
 # Install needed/useful packages
 sudo apt-get update
-sudo apt-get install curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xdotool xmonad pcscd scdaemon libtool help2man libpam-dev yubikey-personalization yubikey-personalization-gui asciidoc libcurl4-gnutls-dev build-essential m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev nodejs
+sudo apt-get install curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xdotool xmonad pcscd scdaemon libtool help2man libpam-dev yubikey-personalization yubikey-personalization-gui asciidoc libcurl4-gnutls-dev build-essential m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev nodejs texlive-full
 
 # Install JDK 8
 sudo add-apt-repository ppa:webupd8team/java

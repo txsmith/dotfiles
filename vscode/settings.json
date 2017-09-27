@@ -16,8 +16,7 @@
  
   "git.autofetch": false,
   "window.menuBarVisibility": "toggle",
-  "workbench.sideBar.location": "left",
-  "workbench.activityBar.visible": true,
   "workbench.statusBar.visible": true,
-  "workbench.startupEditor": "welcomePage"
+  "workbench.activityBar.visible": false,
+  "workbench.startupEditor": "newUntitledFile"
 }
