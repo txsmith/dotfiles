@@ -77,8 +77,8 @@ myKeys conf = systemKeys ^++^ launcherKeys
     launcherKeys = subKeys "Launchers"
       [ ("M-<Space>", addName "Launcher" $ spawn myLauncher)
       , ("M-S-<Space>", addName "DRUN Launcher" $ spawn myDrunLauncher)
-      , ("M-<Return>", addName "Terminal" $ spawn myTerminal)
-      , ("M-\\", addName "Browser" $ spawn myBrowser)
+      , ("M-\\", addName "Terminal" $ spawn myTerminal)
+      , ("M-<Return>", addName "Browser" $ spawn myBrowser)
       , ("M-<Print>", addName "Screenshot" $ spawn screenshotSelectCommand)
       , ("M-o", addName "Password lookup dialog" $ passPrompt myPromptTheme)
 
