@@ -4,7 +4,7 @@ echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sourc
 
 # Install needed/useful packages
 sudo apt-get update
-sudo apt-get install curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xdotool xmonad pcscd scdaemon libtool help2man libpam-dev yubikey-personalization yubikey-personalization-gui asciidoc libcurl4-gnutls-dev build-essential m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev nodejs texlive-full
+sudo apt-get install -y curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xdotool xmonad pcscd scdaemon libtool help2man libpam-dev yubikey-personalization yubikey-personalization-gui asciidoc libcurl4-gnutls-dev build-essential m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev texlive-full
 
 # Install JDK 8
 sudo add-apt-repository ppa:webupd8team/java
@@ -41,6 +41,10 @@ cd ~/Downloads
 git clone https://github.com/horst3180/arc-theme --depth 1 && cd arc-theme
 ./autogen.sh --prefix=/usr
 sudo make install
+# Fix npm permissions
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+
 
 # Rebuid font cache
 fc-cache -f -v
@@ -63,6 +67,12 @@ xmonad --rebuild
 # Install VS Code config
 ln -s ~/dotfiles/vscode/keybindings.json ~/.config/Code/User/
 ln -s ~/dotfiles/vscode/settings.json ~/.config/Code/User/
+
+# Install Node and NPM
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo npm install -g n
+sudo n stable
 
 # Install keybase 
 cd ~/Downloads
