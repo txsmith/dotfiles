@@ -40,12 +40,12 @@ Config {
           "-c", "#2f343f",
           "-C", "#2f343f"
         ] 10
-      , Run Wireless "wlan0" [
+      , Run Wireless "wlp3s0" [
           "-t", "<fn=1>\xf1eb</fn>  <essid>",
           "-x", "Not Connected"
         ] 10
     ]
   , sepChar = "%"
   , alignSep = "}{"
-  , template = "  %UnsafeStdinReader% } <action=`gsimplecal mainwindow_yoffset=24` button=1>%date%</action> { %wlan0wi%    %default:Master%    %battery%    <action=`xdotool key super+shift+q` button=1><fn=1><raw=1:/></fn></action>  "
+  , template = "  %UnsafeStdinReader% } <action=`gsimplecal mainwindow_yoffset=24` button=1>%date%</action> { %wlp3s0wi%    %default:Master%    %battery%    <action=`xdotool key super+shift+q` button=1><fn=1><raw=1:/></fn></action>  "
 }
