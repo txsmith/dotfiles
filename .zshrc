@@ -74,7 +74,7 @@ plugins=(git gitfast dirhistory mvn npm sudo web-search wd stack)
 
   export PASSWORD_STORE_CLIP_TIME=10
 
-  export _JAVA_AWT_WM_NONREPARENTING=1
+  # export _JAVA_AWT_WM_NONREPARENTING=1
 
 source $ZSH/oh-my-zsh.sh
 

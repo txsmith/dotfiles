@@ -121,3 +121,6 @@ echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
 # Also make sure the paths in 85-yubikey.rules are correct for you
 # And change authorized_yubikeys accordingly
 
+# Increase the inotify watch limit for IntelliJ
+echo "fs.inotify.max_user_watches = 524288" | sudo tee /etc/sysctl.d/idea.conf > /dev/null
+sudo sysctl -p --system
