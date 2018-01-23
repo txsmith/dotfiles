@@ -1,2 +1,3 @@
-:set prompt "\ESC[2m\STX%s > \ESC[m\STX"
+:set prompt "\ESC[2m\STXλ > \ESC[m\STX"
+-- %s
 :def hlint const . return $ ":! hlint \"src\""

@@ -1,7 +1,7 @@
 // Place your settings in this file to overwrite the default settings
 {
   "editor.tabSize": 2,
-  "window.zoomLevel": -1,
+  "window.zoomLevel": 0,
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,
@@ -13,10 +13,14 @@
   "editor.minimap.enabled": false,
   "haskell.ghcMod.logLevel": "log",
   "haskell.ghcMod.executablePath": "stack",
- 
+
   "git.autofetch": false,
   "window.menuBarVisibility": "toggle",
-  "workbench.statusBar.visible": true,
+  "workbench.statusBar.visible": false,
   "workbench.activityBar.visible": false,
-  "workbench.startupEditor": "newUntitledFile"
+  "workbench.startupEditor": "newUntitledFile",
+  "files.trimTrailingWhitespace": true,
+  "editor.trimAutoWhitespace": true,
+  "editor.fontFamily": "'Fira Code'",
+  "editor.fontLigatures": true
 }

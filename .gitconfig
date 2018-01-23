@@ -10,3 +10,11 @@
 	gpgsign = true
 [gpg]
 	program = gpg2
+# [url "https://github"]
+# 	insteadOf = git://github
+# [url "https://github.com/"]
+#   insteadOf = git@github.com:
+[diff]
+    tool = vs-code
+[difftool "vs-code"]
+    cmd = code --wait --diff $LOCAL $REMOTE
