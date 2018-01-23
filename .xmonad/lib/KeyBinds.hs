@@ -35,7 +35,7 @@ import Actions
 import Layout
 import Workspaces
 import Data.List (find)
-import qualified Data.Map as M 
+import qualified Data.Map as M
 
 -- Display keyboard mappings using zenity
 -- from https://github.com/thomasf/dotfiles-thomasf-xmonad/
@@ -47,7 +47,7 @@ myModMask :: KeyMask
 myModMask = mod4Mask
 
 myKeys :: XConfig Layout -> [((KeyMask, KeySym), NamedAction)]
-myKeys conf = systemKeys ^++^ launcherKeys 
+myKeys conf = systemKeys ^++^ launcherKeys
             ^++^ windowKeys ^++^ layoutKeys ^++^ workspaceKeys
   where
 
@@ -73,7 +73,7 @@ myKeys conf = systemKeys ^++^ launcherKeys
                     , ("Reboot", reboot)
                     ] myPromptTheme)
       ]
-    
+
     launcherKeys = subKeys "Launchers"
       [ ("M-<Space>", addName "Launcher" $ spawn myLauncher)
       , ("M-S-<Space>", addName "DRUN Launcher" $ spawn myDrunLauncher)
@@ -89,11 +89,11 @@ myKeys conf = systemKeys ^++^ launcherKeys
     windowKeys = subKeys "Windows" (
       [ ("M-<Backspace>", addName "Kill" kill1)
       , ("M-S-<Backspace>", addName "Kill all" $ confirmPrompt hotPromptTheme "kill all" killAll)
-      
+
       -- Windows
       , ("M-<Tab>", addName "NRavigate next window" $ windows W.focusUp )
       , ("M-S-<Tcab>", addName "Swap next window" $ windows W.swapUp )
-      ] 
+      ]
       -- Move / Navigate thourgh windows with M-<w,s,a,d>
       ++ zipM' "M-" "Navigate window" dirKeys dirs windowGo True
       ++ zipM' "M-S-" "Move window" dirKeys dirs windowSwap True
@@ -109,19 +109,19 @@ myKeys conf = systemKeys ^++^ launcherKeys
 
       , ("M-h", addName "Hide window to stack" $ withFocused hideWindow)
       , ("M-S-h", addName "Pop window from hidden stack" $ popNewestHiddenWindow)
-      
+
       , ("M-f", addName "Fullscreen" $ sequence_ [ (withFocused $ windows . W.sink)
                                                  , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULL) ])
       , ("M-S-f", addName "Fullscreen" $ sequence_ [ (withFocused $ windows . W.sink)
                                                  , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULLBAR) ])
-      
+
       , ("M-r", addName "Rotate BSP Layout" $ sendMessage Rotate)
       , ("M-b", addName "Swap BSP Layout" $ sendMessage Swap)
       , ("M-t", addName "Toggle struts" $ sendMessage ToggleStruts)
       ]
 
     workspaceKeys = subKeys "Workspaces & Projects" (
-      [ ("M-S-<Return>", addName "Activate current Project" $ currentProject >>= activateProject) 
+      [ ("M-S-<Return>", addName "Activate current Project" $ currentProject >>= activateProject)
       , ("M-p", addName "Switch to Project" $ switchProjectPrompt myPromptTheme)
       , ("M-S-p", addName "Shift to Project" $ shiftToProjectPrompt myPromptTheme)
       , ("M-C-p", addName "Rename Project" $ renameProjectPrompt myPromptTheme)
@@ -137,7 +137,7 @@ myKeys conf = systemKeys ^++^ launcherKeys
       ++ zipM "M-" "View ws" wsKeys [0..] (withNthWorkspace $ ifNotScratchpad W.view)
       ++ zipM "M-S-" "Move w to ws" wsKeys [0..] (withNthWorkspace $ ifNotScratchpad W.shift)
       )
-    
+
     wsKeys = show <$> [1..9] ++ [0]
 
     nextNonEmptyWS = do
@@ -161,7 +161,7 @@ myKeys conf = systemKeys ^++^ launcherKeys
 -- Includes window w/h ratio constraint (square) using X.H.ConstrainedResize
 myMouseBindings (XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
-    [ 
+    [
       ((myModMask,               button1) ,(\w -> focus w
       >> mouseMoveWindow w
       >> ifClick (snapMagicMove (Just 50) (Just 50) w)
@@ -188,7 +188,7 @@ myMouseBindings (XConfig {XMonad.modMask = myModMask}) = M.fromList $
     -- Scroll down
     , ((myModMask, button5), (\_ -> do sendMessage $ ExpandTowards D))
     , ((myModMask .|. shiftMask, button5), (\_ -> do sendMessage $ ShrinkFrom U))
-    
+
     -- Scroll Left
     , ((myModMask, 7), (\_ -> sendMessage $ ExpandTowards L))
     , ((myModMask .|. shiftMask, 7), (\_ -> sendMessage $ ShrinkFrom R))

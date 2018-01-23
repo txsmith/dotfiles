@@ -25,8 +25,7 @@ import XMonad.Actions.DynamicWorkspaceOrder (getSortByOrder, getWsCompareByOrder
 
 import System.IO
 import Data.Monoid
-import Data.List (elemIndex, isPrefixOf, sortBy)
-import Data.Char (toLower)
+import Data.List (elemIndex, sortBy)
 
 import KeyBinds
 import Actions
@@ -41,41 +40,34 @@ main :: IO ()
 main = do
     xmproc <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
 
-    xmonad $ 
-      fullscreenSupport $ 
+    xmonad $
+      fullscreenSupport $
       dynamicProjects projects $
-      withNavigation2DConfig myNav2DConf $ 
+      withNavigation2DConfig myNav2DConf $
       ewmh $
       addDescrKeys' ((myModMask, xK_F1), showKeybindings) KeyBinds.myKeys $
       myConfig xmproc
 
 
 myConfig p = def
-        { borderWidth        = myBorderWidth
-        , normalBorderColor  = myNormalBorderColor
-        , focusedBorderColor = myHighlightTextColor
+  { borderWidth        = myBorderWidth
+  , normalBorderColor  = myNormalBorderColor
+  , focusedBorderColor = myHighlightTextColor
 
-        , clickJustFocuses   = myClickJustFocuses
-        , focusFollowsMouse  = myFocusFollowsMouse
-        
-        , manageHook         = myManageHook
-        , handleEventHook    = myHandleEventHook
-        , layoutHook         = myLayoutHook
-        , logHook            = myLogHook p
-        , startupHook        = myStartupHook
+  , clickJustFocuses   = myClickJustFocuses
+  , focusFollowsMouse  = myFocusFollowsMouse
 
-        , mouseBindings      = myMouseBindings
-        , modMask            = myModMask
-        , terminal           = myTerminal
-        , workspaces         = myWorkspaces
-        }
+  , manageHook         = myManageHook
+  , handleEventHook    = myHandleEventHook
+  , layoutHook         = myLayoutHook
+  , logHook            = myLogHook p
+  , startupHook        = myStartupHook
 
-
-
-isSpotify = do
-  c <- stringProperty "WM_NAME"
-  trace $ "CLASS IS:" ++ c
-  return $ ("spotify" `isPrefixOf`) $ (toLower <$> c)
+  , mouseBindings      = myMouseBindings
+  , modMask            = myModMask
+  , terminal           = myTerminal
+  , workspaces         = myWorkspaces
+  }
 
 
 myManageHook :: ManageHook
@@ -83,15 +75,15 @@ myManageHook = do
   manageDocks
   manageSpawn
   namedScratchpadManageHook scratchpads
-  composeOne [ 
+  composeOne [
       isScratchpadTerminal -?> doCenterFloat
+    , isSpotify -?> doCenterFloat
     , isCalculator -?> doCenterFloat
-    ] 
+    ]
 
 
 myHandleEventHook :: Event -> X All
-myHandleEventHook = do 
-  docksEventHook
+myHandleEventHook = docksEventHook
 
 
 myLogHook :: Handle -> X ()
@@ -114,7 +106,7 @@ myLogHook xmproc = do
       , ppLayout = hide
   }
 
-  where 
+  where
     hide = const ""
 
     makeClickable sortedWs wId = case elemIndex wId sortedWs of

@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 module Workspaces where
 
 import XMonad.Actions.SpawnOn
@@ -14,7 +15,7 @@ wsBrowser = "Internet"
 wsChat = "Chat"
 wsSpotify = "Spotify"
 wsTerminals = "Terminal"
-wsHueHaskell = "Hue Haskell"
+wsHueHaskell = "Haskell Dev"
 wsXMonad = "XMonad"
 wsHaskellBook = "Haskell Book"
 wsStudy = "Study"
@@ -32,13 +33,16 @@ myWorkspaces = [
 
 isScratchpadTerminal = (className =? "Gnome-terminal")
   <&&> (stringProperty "WM_WINDOW_ROLE" =? "Scratchpad")
-    
-isCalculator = (className =? "Gnome-calculator")
+
+isCalculator = className =? "Gnome-calculator"
+
+isSpotify = className =? "Spotify"
 
 scratchpads = [
     NS "terminal" (myTerminal ++ " --role=Scratchpad") isScratchpadTerminal defaultFloating
   , NS "calculator" myCalculator isCalculator defaultFloating
-  ] 
+  , NS "spotify" myMusic isSpotify defaultFloating
+  ]
 
 projects :: [Project]
 projects = [
@@ -47,9 +51,8 @@ projects = [
   -- , project wsTerminals "~/" [myTerminal]
   , project wsChat "~/" [myTelegram]
   , project wsSpotify "~/" [myMusic]
-  , project wsHueHaskell "~/dev/haskell/hue" [myTerminal, "code ."]
-  , project wsHaskellBook "~/dev/haskell/hue" [myTerminal, "code ."]
-  , project wsHaskellBook "~/dev/haskell/learning/playground" ["xdg-open ~/Dropbox/Ebooks/haskell-programming-0.12.0-screen.pdf", myTerminal, "code ."]
+  , project wsHueHaskell "~/dev/haskell" [myTerminal, "code ."]
+  , project wsHaskellBook "~/dev/haskell-study-startup/notes" ["xdg-open ~/Dropbox/Ebooks/haskell-programming-0.12.0-screen.pdf", myTerminal, "code ."]
   , project wsXMonad "~/.xmonad" [myTerminal, "code ."]
   , project wsStudy "~/dev/tu" [myTerminal, "code .", myBrowser ++ " --new-window \"https://brightspace.tudelft.nl\""]
   ]
