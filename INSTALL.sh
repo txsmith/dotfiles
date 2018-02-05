@@ -29,6 +29,7 @@ ln -s ~/dotfiles/.xmonad
 ln -s ~/dotfiles/.xprofile
 ln -s ~/dotfiles/.Xresources
 ln -s ~/dotfiles/.yubico
+ln -s ~/dotfiles/.dav2fs
 
 # Install oh my zsh
 wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
@@ -126,6 +127,6 @@ echo "fs.inotify.max_user_watches = 524288" | sudo tee /etc/sysctl.d/idea.conf >
 sudo sysctl -p --system
 
 # TransIP Stack WebDAV mount
-usermod -aG davfs2 thomas
+sudo usermod -aG davfs2 thomas
 mkdir ~/stack
-sudo echo "https://tnsmith.stackstorage.com/remote.php/webdav/ /home/thomas/stack davfs user,rw,noauto 0 0" >> /etc/fstab
+echo "https://tnsmith.stackstorage.com/remote.php/webdav/ /home/thomas/stack davfs user,rw,noauto 0 0" | sudo tee --append /etc/fstab

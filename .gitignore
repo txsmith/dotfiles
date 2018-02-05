@@ -11,5 +11,5 @@ xmonad-x86_64-linux
 .stack-work
 history
 secrets
-.dav2fs/cache
-.dav2fs/certs
+.davfs2/cache
+.davfs2/certs
