@@ -4,7 +4,7 @@ echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sourc
 
 # Install needed/useful packages
 sudo apt-get update
-sudo apt-get install -y curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xdotool xmonad pcscd scdaemon libtool help2man libpam-dev yubikey-personalization yubikey-personalization-gui asciidoc libcurl4-gnutls-dev build-essential m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev texlive-full
+sudo apt-get install -y curl wget pass pwgen compton zsh libindicator7 libappindicator1 feh pinentry-gtk2 spotify-client autoconf libgtk-3-dev gnome-themes-standard unity-tweak-tool rofi cabal-install libghc-libxml-sax-dev c2hs libasound2-dev libiw-dev libxpm-dev xdotool xmonad pcscd scdaemon libtool help2man libpam-dev yubikey-personalization yubikey-personalization-gui asciidoc libcurl4-gnutls-dev build-essential m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev texlive-full davfs2
 
 # Install JDK 8
 sudo add-apt-repository ppa:webupd8team/java
@@ -74,12 +74,12 @@ sudo apt-get install -y nodejs
 sudo npm install -g n
 sudo n stable
 
-# Install keybase 
+# Install keybase
 cd ~/Downloads
 curl -O https://prerelease.keybase.io/keybase_amd64.deb
 sudo dpkg -i keybase_amd64.deb
 sudo apt-get install -f
-run_keybase 
+run_keybase
 # Don't forget to import your public key into gpg2
 
 # Install Yubico stuff from source to support challenge-response login
@@ -124,3 +124,8 @@ echo "enable-ssh-support" >> ~/.gnupg/gpg-agent.conf
 # Increase the inotify watch limit for IntelliJ
 echo "fs.inotify.max_user_watches = 524288" | sudo tee /etc/sysctl.d/idea.conf > /dev/null
 sudo sysctl -p --system
+
+# TransIP Stack WebDAV mount
+usermod -aG davfs2 thomas
+mkdir ~/stack
+sudo echo "https://tnsmith.stackstorage.com/remote.php/webdav/ /home/thomas/stack davfs user,rw,noauto 0 0" >> /etc/fstab

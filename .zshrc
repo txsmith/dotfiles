@@ -113,6 +113,6 @@ alias change-terminal-theme='wget -O gogh https://git.io/vQgMr && chmod +x gogh 
 function ghc-flamegraph-render() {
   cat "$1" | ghc-prof-flamegraph | flamegraph.pl > $1.svg
 }
-function gi() { 
+function gi() {
   curl -L -s https://www.gitignore.io/api/$@ ;
 }
