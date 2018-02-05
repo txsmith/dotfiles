@@ -1,5 +1,11 @@
 [
-    { "key": "ctrl+d", 
+    { "key": "ctrl+d",
         "command": "editor.action.deleteLines",
-        "when": "editorTextFocus && !editorReadonly" }
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+k ctrl+l",
+        "command": "extension.surrounding.command00",
+        "when": "editorHasSelection && editorTextFocus"
+    }
 ]

@@ -11,8 +11,6 @@
   "workbench.iconTheme": "vs-seti",
   "workbench.colorTheme": "Solarized Light",
   "editor.minimap.enabled": false,
-  "haskell.ghcMod.logLevel": "log",
-  "haskell.ghcMod.executablePath": "stack",
 
   "git.autofetch": false,
   "window.menuBarVisibility": "toggle",
@@ -22,5 +20,9 @@
   "files.trimTrailingWhitespace": true,
   "editor.trimAutoWhitespace": true,
   "editor.fontFamily": "'Fira Code'",
-  "editor.fontLigatures": true
+  "editor.fontLigatures": true,
+  "languageServerHaskell.useHieWrapper": true,
+  "haskell.indentationRules.enabled": true,
+  "surrounding.commands.0.prefix": "{-# LANGUAGE ",
+  "surrounding.commands.0.postfix": " #-}",
 }
