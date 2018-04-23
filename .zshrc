@@ -69,7 +69,7 @@ plugins=(git gitfast dirhistory mvn npm sudo web-search wd stack)
 
 # GPG agent config
   GPG_TTY=$(tty)
-  SSH_AUTH_SOCK="$HOME/.gnupg/S.gpg-agent.ssh"
+  SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
   export GPG_TTY SSH_AUTH_SOCK
 
   export PASSWORD_STORE_CLIP_TIME=10
@@ -106,7 +106,7 @@ alias grh='git reset --hard'
 alias grho='git reset --hard origin/$(git_current_branch)'
 # Other aliases
 alias xo='xdg-open'
-alias dist-upgrade='sudo apt-get update && sudo apt-get dist-upgrade'
+alias dist-upgrade='sudo apt update && sudo apt dist-upgrade'
 alias lock='gnome-screensaver-command -l'
 alias change-terminal-theme='wget -O gogh https://git.io/vQgMr && chmod +x gogh && ./gogh && rm gogh'
 

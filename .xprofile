@@ -1,9 +1,6 @@
-feh --bg-scale ~/dotfiles/wallpapers/os_x_yosemite.jpg
-dropbox start 2> /dev/null
-
 # Use GPG for SSH auth
 killall gpg-agent 2> /dev/null
 gpg-connect-agent /bye 2> /dev/null
 
 # Mount TransIP Stack WebDAV
-mount ~/stack
+# mount ~/stack
