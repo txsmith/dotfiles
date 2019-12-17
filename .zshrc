@@ -63,9 +63,14 @@ plugins=(git gitfast dirhistory mvn npm sudo web-search wd stack)
   export MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 
   export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/thomas/.local/bin"
-  export PATH="/home/thomas/.npm-global/bin:$PATH"
+  export PATH="$HOME/.npm-global/bin:$PATH"
   export PATH="$HOME/.cargo/bin:$PATH"
   export PATH="$NPM_PACKAGES/bin:$PATH"
+  export PATH="$HOME/.cabal/bin:$PATH"
+  export PATH="/usr/local/go/bin:$PATH"
+  export PATH="$HOME/dev/go/bin:$PATH"
+  export GOPATH="$HOME/dev/go"
+  export GOROOT="/usr/local/go"
 
 # GPG agent config
   GPG_TTY=$(tty)
@@ -74,9 +79,10 @@ plugins=(git gitfast dirhistory mvn npm sudo web-search wd stack)
 
   export PASSWORD_STORE_CLIP_TIME=10
 
-  # export _JAVA_AWT_WM_NONREPARENTING=1
+  export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --preview "[[ $(file --mime {}) =~ binary ]] && echo Binary file, no preview available || (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -200"'
 
 source $ZSH/oh-my-zsh.sh
+source $HOME/.nix-profile/etc/profile.d/nix.sh
 
 zstyle ':completion:*' matcher-list '' \
   'm:{a-z\-}={A-Z\_}' \
@@ -113,3 +119,8 @@ alias change-terminal-theme='wget -O gogh https://git.io/vQgMr && chmod +x gogh 
 function gitignore() {
   curl -L -s https://www.gitignore.io/api/$@ ;
 }
+
+function give-me-the-paper() {
+  pass tudelft.nl/tsmith | sudo openconnect luchtbrug.tudelft.nl -u tsmith --passwd-on-stdin
+}
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
