@@ -1,7 +1,0 @@
-:set prompt "\ESC[2m\STXλ > \ESC[m\STX"
--- %s
-:def hlint const . return $ ":! hlint \"src\""
-:set -XOverloadedStrings
-:set -XBinaryLiterals
-:set -XTypeApplications
-:set -XDataKinds

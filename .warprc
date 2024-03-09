@@ -1,9 +1,0 @@
-preview-frontend:~/dev/preview/frontend
-preview-backend:~/dev/preview/backend
-dev:~/dev
-pic:~/Pictures
-dl:~/Downloads
-mnt:/media/thomas
-tu:~/dev/tu
-hs:~/dev/Haskell
-dot:~/dotfiles
