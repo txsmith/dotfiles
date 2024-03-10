@@ -1,1 +1,23 @@
-/Users/thomas/.skhdrc
+cmd + alt + shift - i : idea
+cmd + alt + shift - c : open -a "/Applications/Google Chrome.app"
+cmd + alt + shift - t : open -a /Applications/iTerm.app
+cmd + alt + shift - s : open -a /Applications/Slack.app
+cmd + alt + shift - m : open -a /Applications/Spotify.app
+cmd + alt + shift - e : open -a /Applications/Telegram.app
+
+cmd + alt + shift - h : yabai -m window --focus west
+cmd + alt + shift - j : yabai -m window --focus south
+cmd + alt + shift - k : yabai -m window --focus north
+cmd + alt + shift - l : yabai -m window --focus east
+
+ctrl + cmd + alt + shift - h : yabai -m window --swap west
+ctrl + cmd + alt + shift - j : yabai -m window --swap south
+ctrl + cmd + alt + shift - k : yabai -m window --swap north
+ctrl + cmd + alt + shift - l : yabai -m window --swap east
+
+cmd + alt + shift - r : yabai -m space --rotate 270
+cmd + alt + shift - y : yabai -m space --mirror y-axis
+cmd + alt + shift - x : yabai -m space --mirror x-axis
+cmd + alt + shift - f : yabai -m window --toggle float --grid 4:4:1:1:2:2
+cmd + alt + shift - return : yabai -m window --toggle zoom-fullscreen
+

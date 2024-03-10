@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+
+#
+# for this to work you must configure sudo such that
+# it will be able to run the command without password
+#
+# see this wiki page for information:
+#  - https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#configure-scripting-addition
+#
+# yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+# sudo yabai --load-sa
+#
+
+# global settings
+yabai -m rule --add app="^(Slack|System Settings|Spotify|Calculator|Karabiner-EventViewer)$" manage=off
+
+yabai -m config                                 \
+    layout                       bsp            \
+    top_padding                  00             \
+    bottom_padding               12             \
+    left_padding                 12             \
+    right_padding                12             \
+    window_gap                   12             \
+    mouse_follows_focus          on             \
+    focus_follows_mouse          on             \
+    mouse_drop_action            stack
+
+echo "yabai configuration loaded.."
